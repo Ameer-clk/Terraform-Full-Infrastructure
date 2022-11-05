@@ -4,7 +4,7 @@
 # terrafrom init
 _________________
 
-To exicute check cloud provide and our code 
+To exicute and to check the cloud provide and our code 
 
 
 # terraform validate
