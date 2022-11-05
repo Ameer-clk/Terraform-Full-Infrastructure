@@ -1,7 +1,7 @@
   provider "aws" {
   region = "us-east-1"
-  access_key = "AKIA3RFYQ64PLP62UE67"
-  secret_key = "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"
+  access_key = "dVwZY+3gpylq+4lmlDDg4dBpLhYnTiTlcnatXQ8E"
+  secret_key = "dVwZY+3gpylq+4lmlDDg4dBpLhYnTiTlcnatXQ8E"
 }
   resource "aws_vpc" "main" {
   cidr_block = "10.1.0.0/16"
@@ -34,7 +34,7 @@ resource "aws_security_group" "serversg" {
   name        = "serversg"
   description = "For new infra"
   vpc_id      = aws_vpc.main.id
-  image_id    = "ami-06640050dc3f556bb"
+  image_id    = "ami-08c40ec9ead489470"
 }
 
 resource "aws_ami" "example" {
@@ -44,14 +44,14 @@ resource "aws_ami" "example" {
   imds_support        = "v2.0"
   ebs_block_device {
     device_name = "/dev/xvda"
-    snapshot_id = "snap-0dad6dd3afcafa13c"
+    snapshot_id = "snap-09c3bd9a539a0c1fb"
      volume_size = 100
   }
 }
 
 resource "aws_launch_template" "mytemplate" {
   name = "mytemplate"
-  image_id = "ami-06640050dc3f556bb"
+  image_id = "ami-08c40ec9ead489470"
    instance_type = "t2.micro"
    key_name = "demo"
 }
