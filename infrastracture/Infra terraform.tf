@@ -34,7 +34,6 @@ resource "aws_security_group" "serversg" {
   name        = "serversg"
   description = "For new infra"
   vpc_id      = aws_vpc.main.id
-  image_id    = "ami-08c40ec9ead489470"
 }
 
 resource "aws_ami" "example" {
