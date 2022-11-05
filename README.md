@@ -17,24 +17,6 @@ To better understand the advantages of Terraform, it helps to first understand t
 
 Infrastructure as code can help with the following:
 
-    Improve speed: Automation is faster than manually navigating an interface when you need to deploy and/or connect resources.
-    Improve reliability: If your infrastructure is large, it becomes easy to misconfigure a resource or provision services in the wrong order. With IaC, the resources are always provisioned and configured exactly as declared.
-    Prevent configuration drift: Configuration drift occurs when the configuration that provisioned your environment no longer matches the actual environment. (See ‘Immutable infrastructure’ below.)
-    Support experimentation, testing, and optimization: Because Infrastructure as Code makes provisioning new infrastructure so much faster and easier, you can make and test experimental changes without investing lots of time and resources; and if you like the results, you can quickly scale up the new infrastructure for production.
-
-
-
-To create you own infrastructure as code you can use the documentation the link is given below:
-
-https://registry.terraform.io/
-
-For the installation the link is given below:
-
-https://www.terraform.io/downloads
-
-
-These are the some examples of IAC codes:
-
 resource "aws_lb" "test" {
   name               = "test-lb-tf"
   internal           = false
@@ -54,6 +36,20 @@ resource "aws_lb" "test" {
     Environment = "production"
   }
 }
+
+
+To create you own infrastructure as code you can use the documentation the link is given below:
+
+https://registry.terraform.io/
+
+For the installation the link is given below:
+
+https://www.terraform.io/downloads
+
+
+These are the some examples of IAC codes:
+
+
 
 
 this is an exampele of  AWS Elastic loadbalancer code.
