@@ -7,35 +7,10 @@ A declarative coding tool, Terraform enables developers to use a high-level conf
 
 Because Terraform uses a simple syntax, can provision infrastructure across multiple cloud and on-premises data centers, and can safely and efficiently re-provision infrastructure in response to configuration changes, it is currently one of the most popular infrastructure automation tools available. If your organization plans to deploy a hybrid cloud or multicloud environment, you’ll likely want or need to get to know Terraform.
 
-
-
-
 Infrastructure as code (IAC)
 
 
 To better understand the advantages of Terraform, it helps to first understand the benefits of Infrastructure as Code (IaC). IaC allows developers to codify infrastructure in a way that makes provisioning automated, faster, and repeatable. It’s a key component of Agile and DevOps practices such as version control, continuous integration, and continuous deployment.
-
-Infrastructure as code can help with the following:
-
-resource "aws_lb" "test" {
-  name               = "test-lb-tf"
-  internal           = false
-  load_balancer_type = "application"
-  security_groups    = [aws_security_group.lb_sg.id]
-  subnets            = [for subnet in aws_subnet.public : subnet.id]
-
-  enable_deletion_protection = true
-
-  access_logs {
-    bucket  = aws_s3_bucket.lb_logs.bucket
-    prefix  = "test-lb"
-    enabled = true
-  }
-
-  tags = {
-    Environment = "production"
-  }
-}
 
 
 To create you own infrastructure as code you can use the documentation the link is given below:
@@ -47,12 +22,8 @@ For the installation the link is given below:
 https://www.terraform.io/downloads
 
 
-These are the some examples of IAC codes:
 
 
-
-
-this is an exampele of  AWS Elastic loadbalancer code.
 
 
 
