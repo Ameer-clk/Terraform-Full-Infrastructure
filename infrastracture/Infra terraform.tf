@@ -1,7 +1,7 @@
   provider "aws" {
   region = "us-east-1"
-  access_key = "dVwZY+3gpylq+4lmlDDg4dBpLhYnTiTlcnatXQ8E"
-  secret_key = "dVwZY+3gpylq+4lmlDDg4dBpLhYnTiTlcnatXQ8E"
+  access_key = "hshahhsask"
+  secret_key = "73733838388"
 }
   resource "aws_vpc" "main" {
   cidr_block = "10.1.0.0/16"
@@ -43,7 +43,7 @@ resource "aws_ami" "example" {
   imds_support        = "v2.0"
   ebs_block_device {
     device_name = "/dev/xvda"
-    snapshot_id = "snap-09c3bd9a539a0c1fb"
+    snapshot_id = "you can add your own snapshot id"
      volume_size = 100
   }
 }
