@@ -85,19 +85,3 @@ resource "aws_sns_topic" "newtopic" {
   name = "newtopic"
   kms_master_key_id = "alias/aws/sns"
 }
- 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
