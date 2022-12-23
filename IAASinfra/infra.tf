@@ -101,7 +101,7 @@ resource "aws_lb" "mylb" {
   internal           = false
   load_balancer_type = "application"
   security_groups    = [aws_security_group.mysg.id]
-  subnets            = [ aws_subnet.subnet1.id,aws_subnet2.id]
+  subnets            = [aws_subnet.subnet1.id,aws_subnet2.id]
 }
 
 resource "aws_autoscaling_group" "myaug" {
@@ -116,7 +116,7 @@ resource "aws_autoscaling_group" "myaug" {
   }
 }
  
- resource "aws_s3_bucket" "mybucket96339" {
+ resource "aws_s3_bucket" "myb8ucket96339" {
   bucket = "mybucket96339"
     acl    = "private"
  }
