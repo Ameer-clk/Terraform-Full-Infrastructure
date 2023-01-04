@@ -150,7 +150,7 @@ resource "aws_cloudwatch_metric_alarm" "myalarm" {
   insufficient_data_actions = []
 }
 
-resource "aws_sns_topic" "servernot" {
-  name = "servernot"
+resource "aws_sns_topic" "newtopic" {
+  name = "newtopic"
 }
    
