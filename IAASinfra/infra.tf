@@ -36,11 +36,6 @@ resource "aws_route_table_association" "b" {
   route_table_id = aws_route_table.bar.id
 }
 
-resource "aws_route_table_association" "c" {
-  gateway_id     = aws_internet_gateway.myigw.id
-  route_table_id = aws_route_table.myroutetable.id
-}
-
 resource "aws_security_group" "mysg" {
   name        = "mysg"
   description = "For the infra"
