@@ -133,8 +133,8 @@ resource "aws_autoscaling_group" "myaug" {
   skip_final_snapshot  = true
 }
 
-resource "aws_route53domains_registered_domain" "example" {
-  domain_name = "example.com"
+resource "aws_route53domains_registered_domain" "domain.com" {
+  domain_name = "domain.com"
 }
 
 resource "aws_cloudwatch_metric_alarm" "myalarm" {
