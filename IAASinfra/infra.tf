@@ -71,7 +71,7 @@ resource "aws_security_group" "mysg" {
   imds_support        = "v2.0" 
   ebs_block_device {
     device_name = "/dev/xvda"
-    snapshot_id = "snap-xxxxxxxx"
+    snapshot_id = "The snap id you are giving"
     volume_size = 20 
   }
 }
@@ -148,4 +148,3 @@ resource "aws_cloudwatch_metric_alarm" "myalarm" {
 resource "aws_sns_topic" "newtopic" {
   name = "newtopic"
 }
-   
