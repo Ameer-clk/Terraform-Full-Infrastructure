@@ -59,22 +59,12 @@ resource "aws_security_group" "mysg" {
     ipv6_cidr_blocks = ["::/0"]
   }
 
-  resource "aws_ebs_volume" "myvolume" {
-  availability_zone = "us-east-2a"
-  size              = 20 
+ resource "aws_ami_copy" "example" {
+  name              = "terraform-example"
+  description       = "A copy of ami-xxxxxxxx"
+  source_ami_id     = "ami-xxxxxxxx"
+  source_ami_region = "us-west-1"
   }
-
-  resource "aws_ami" "example" {
-  name                = "terraform-example"
-  virtualization_type = "hvm"
-  root_device_name    = "/dev/xvda"
-  imds_support        = "v2.0" 
-  ebs_block_device {
-    device_name = "/dev/xvda"
-    snapshot_id = "The snap id you are giving"
-    volume_size = 20 
-  }
-}
 
 resource "aws_launch_template" "mytemplate" {
   name = "mytemplate"
