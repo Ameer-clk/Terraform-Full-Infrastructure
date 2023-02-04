@@ -106,18 +106,6 @@ resource "aws_autoscaling_group" "myaug" {
     acl    = "private"
  }
 
- resource "aws_db_instance" "default" {
-  allocated_storage    = 100
-  db_name              = "mydatabase"
-  engine               = "mysql"
-  engine_version       = "5.7"
-  instance_class       = "db.t2.micro"
-  username             = "admin"
-  password             = "admin12"
-  parameter_group_name = "default.mysql5.7"
-  skip_final_snapshot  = true
-}
-
 resource "aws_route53domains_registered_domain" "domain.com" {
   domain_name = "domain.com"
 }
