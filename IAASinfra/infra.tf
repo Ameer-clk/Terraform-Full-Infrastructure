@@ -70,7 +70,6 @@ resource "aws_launch_template" "mytemplate" {
   name = "mytemplate"
   image_id = "ami-test"
   instance_type = "t2.micro"
-      volume_size = 20
         key_name = "test"
 }
 
