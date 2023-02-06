@@ -91,7 +91,7 @@ resource "aws_lb" "mylb" {
 resource "aws_autoscaling_group" "myaug" {
   availability_zones = ["us-east-1a"]
   desired_capacity   = 1
-  max_size           = 4
+  max_size           = 2
   min_size           = 1
 
   launch_template {
