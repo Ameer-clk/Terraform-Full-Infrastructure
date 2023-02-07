@@ -42,8 +42,8 @@ resource "aws_security_group" "mysg" {
   vpc_id      = aws_vpc.main.id
 }
 
- resource "aws_ami_copy" "example" {
-  name              = "terraform-example"
+ resource "aws_ami_copy" "myami" {
+  name              = "myami"
   description       = "creating new infra"
   source_ami_id     = "ami-00874d747dde814fa"
   source_ami_region = "us-east-1"
