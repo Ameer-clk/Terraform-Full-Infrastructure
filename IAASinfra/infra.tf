@@ -49,10 +49,11 @@ resource "aws_security_group" "mysg" {
   source_ami_region = "us-east-1"
   }
 
-resource "aws_launch_configuration" "augconf" {
-  name          = "augconf"
-  image_id      = ami-00874d747dde814fa
-  instance_type = "t2.micro"
+resource "aws_launch_template" "mytemplate" {
+  name = "mytemplate"
+   image_id = "ami-00874d747dde814fa"
+    instance_type = "t2.micro"
+    key_name = "testingpem"
 }
 
 resource "aws_lb_target_group" "mytarget" {
@@ -70,26 +71,21 @@ resource "aws_lb" "mylb" {
   subnets            = [aws_subnet.subnet1.id,aws_subnet.subnet2.id]
 }
 
-resource "aws_autoscaling_group" "myaugsg" {
-  name                      = "myaug"
-  max_size                  = 2
-  min_size                  = 1
-  health_check_grace_period = 300
-  health_check_type         = "ELB"
-  desired_capacity          = 1
-  force_delete              = true
-  launch_configuration      = aws_launch_configuration.augconf.name
-  vpc_zone_identifier       = [aws_subnet.subnet1.id, aws_subnet.subnet2.id]
+resource "aws_autoscaling_group" "myaug" {
+  availability_zones = ["us-east-1a"]
+  desired_capacity   = 1
+  max_size           = 1
+  min_size           = 2
+
+  launch_template {
+    id      = aws_launch_template.mytemplate.id
+    version = "$Latest"
   }
+}
  
  resource "aws_s3_bucket" "myb8ucket96339" {
   bucket = "mybucket96339"
-    acl    = "private"
  }
-
-resource "aws_route53domains_registered_domain" "ameer.cf" {
-  domain_name = "ameer.cf"
-}
 
 resource "aws_cloudwatch_metric_alarm" "myalarm" {
   alarm_name                = "myalarm"
