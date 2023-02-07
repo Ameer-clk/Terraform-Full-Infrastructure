@@ -51,9 +51,9 @@ resource "aws_security_group" "mysg" {
 
 resource "aws_launch_template" "mytemplate" {
   name = "mytemplate"
-   image_id = "ami-00874d747dde814fa"
-    instance_type = "t2.micro"
-    key_name = "testingpem"
+  instance_type = "t2.micro"
+  image_id = "ami-00874d747dde814fa"
+  key_name = "testingpem"
 }
 
 resource "aws_lb_target_group" "mytarget" {
