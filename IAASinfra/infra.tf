@@ -71,7 +71,7 @@ resource "aws_lb" "mylb" {
   subnets            = [aws_subnet.subnet1.id,aws_subnet.subnet2.id]
 }
 
-resource "aws_autoscaling_group" "myaug" {
+resource "aws_autoscaling_group" "newaug" {
   availability_zones = ["us-east-1a"]
   desired_capacity   = 1
   max_size           = 1
