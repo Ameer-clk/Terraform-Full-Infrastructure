@@ -1,7 +1,7 @@
 provider "aws" {
   region = "us-east-1"
-  access_key = "my-access-key"
-  secret_key = "my-secret-key"
+  access_key = "AKIA5MOUUKS75N6RSHWO"
+  secret_key = "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"
 }
 
 resource "aws_vpc" "main" {
@@ -28,12 +28,12 @@ resource "aws_route_table" "myroutetable" {
 
 resource "aws_route_table_association" "a" {
   subnet_id      = aws_subnet.subnet1.id
-  route_table_id = aws_route_table.bar.id
+  route_table_id = aws_route_table.myroutetable.id
 }
 
 resource "aws_route_table_association" "b" {
   subnet_id      = aws_subnet.subnet2.id
-  route_table_id = aws_route_table.bar.id
+  route_table_id = aws_route_table.myroutetable.id
 }
 
 resource "aws_security_group" "mysg" {
@@ -42,33 +42,16 @@ resource "aws_security_group" "mysg" {
   vpc_id      = aws_vpc.main.id
 }
 
-  ingress {
-    description      = "TLS from VPC"
-    from_port        = 80
-    to_port          = 80
-    protocol         = "tcp"
-    cidr_blocks      = [aws_vpc.main.cidr_block]
-    ipv6_cidr_blocks = [aws_vpc.main.ipv6_cidr_block]
-  }
-
-  egress {
-    from_port        = 0
-    to_port          = 0
-    protocol         = "-1"
-    cidr_blocks      = ["0.0.0.0/0"]
-    ipv6_cidr_blocks = ["::/0"]
-  }
-
  resource "aws_ami_copy" "example" {
   name              = "terraform-example"
-  description       = "A copy of ami-xxxxxxxx"
-  source_ami_id     = "ami-xxxxxxxx"
-  source_ami_region = "us-west-1"
+  description       = "creating new infra"
+  source_ami_id     = "ami-00874d747dde814fa"
+  source_ami_region = "us-east-1"
   }
 
 resource "aws_launch_template" "mytemplate" {
   name = "mytemplate"
-  image_id = "ami-test"
+  image_id = "ami-00874d747dde814fa"
   instance_type = "t2.micro"
         key_name = "test"
 }
@@ -105,8 +88,8 @@ resource "aws_autoscaling_group" "myaug" {
     acl    = "private"
  }
 
-resource "aws_route53domains_registered_domain" "domain.com" {
-  domain_name = "domain.com"
+resource "aws_route53domains_registered_domain" "ameer.cf" {
+  domain_name = "ameer.cf"
 }
 
 resource "aws_cloudwatch_metric_alarm" "myalarm" {
