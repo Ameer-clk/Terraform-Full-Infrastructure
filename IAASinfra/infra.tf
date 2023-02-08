@@ -1,7 +1,7 @@
 provider "aws" {
   region = "us-east-1"
-  access_key = "ansbsbsb"
-  secret_key =  "amashsjsj"
+  access_key = ""
+  secret_key =  ""
 }
 
 resource "aws_vpc" "main" {
@@ -46,14 +46,15 @@ resource "aws_security_group" "mysg" {
   name              = "myami"
   description       = "creating new infra"
   source_ami_id     = "ami-00874d747dde814fa"
-  source_ami_region = "us-east-1"
+  source_ami_region = "us-east-2"
   }
 
 resource "aws_launch_template" "mytemplate" {
   name = "mytemplate"
   instance_type = "t2.micro"
   image_id = "ami-00874d747dde814fa"
-  key_name = "testingpem"
+  key_name = "server"
+   
 }
 
 resource "aws_lb_target_group" "mytarget" {
@@ -72,10 +73,10 @@ resource "aws_lb" "mylb" {
 }
 
 resource "aws_autoscaling_group" "newaug" {
-  availability_zones = ["us-east-1a"]
+  availability_zones = ["us-east-2b"]
   desired_capacity   = 1
-  max_size           = 1
-  min_size           = 2
+  max_size           = 2
+  min_size           = 1
 
   launch_template {
     id      = aws_launch_template.mytemplate.id
