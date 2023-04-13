@@ -45,14 +45,14 @@ resource "aws_security_group" "mysg" {
  resource "aws_ami_copy" "myami" {
   name              = "myami"
   description       = "creating new infra"
-  source_ami_id     = "ami-007855ac798b5175e"
-  source_ami_region = "us-east-2"
+  source_ami_id     = "ami-06e46074ae430fba6"
+  source_ami_region = "us-east-1"
   }
 
 resource "aws_launch_template" "mytemplate" {
   name = "mytemplate"
   instance_type = "t2.micro"
-  image_id = "ami-007855ac798b5175e"
+  image_id = "ami-06e46074ae430fba6"
   key_name = "server"
    
 }
