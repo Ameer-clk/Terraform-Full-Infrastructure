@@ -1,7 +1,7 @@
 provider "aws" {
   region = "us-east-1"
-  access_key = ""
-  secret_key =  ""
+  access_key = "AKIARN2CQI32K2PS4N5P"
+  secret_key =  "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"
 }
 
 resource "aws_vpc" "main" {
@@ -45,14 +45,14 @@ resource "aws_security_group" "mysg" {
  resource "aws_ami_copy" "myami" {
   name              = "myami"
   description       = "creating new infra"
-  source_ami_id     = "ami-00874d747dde814fa"
+  source_ami_id     = "ami-007855ac798b5175e"
   source_ami_region = "us-east-2"
   }
 
 resource "aws_launch_template" "mytemplate" {
   name = "mytemplate"
   instance_type = "t2.micro"
-  image_id = "ami-00874d747dde814fa"
+  image_id = "ami-007855ac798b5175e"
   key_name = "server"
    
 }
@@ -73,7 +73,7 @@ resource "aws_lb" "mylb" {
 }
 
 resource "aws_autoscaling_group" "newaug" {
-  availability_zones = ["us-east-2b"]
+  availability_zones = ["us-east-1b"]
   desired_capacity   = 1
   max_size           = 2
   min_size           = 1
