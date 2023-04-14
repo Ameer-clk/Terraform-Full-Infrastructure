@@ -1,7 +1,7 @@
 provider "aws" {
   region     = "us-east-1"
-  access_key = "AKIA3RFYQ64PKDV77YZQ"
-  secret_key = "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"
+  access_key = "AKIARN2CQI32BLVHIUMQ"
+  secret_key = "k/dJdqGo/dpnOz85doq20tgcFwnOu2hea+/EQym0"
 }
 
 resource "aws_vpc" "main" {
@@ -44,16 +44,16 @@ resource "aws_ami" "example" {
   imds_support        = "v2.0" 
   ebs_block_device {
     device_name = "/dev/xvda"
-    snapshot_id = "snap-0a4e213aa85f1a825"
-    volume_size = 200
+    snapshot_id = "snap-0e9b82395b5fc5fb5"
+    volume_size = 100
   }
 }
 
-resource "aws_launch_template" "mytemplate" {
-  name = "mytemplate"
-  image_id = "ami-06640050dc3f556bb"
+resource "aws_launch_template" "newtemplate" {
+  name = "newtemplate"
+  image_id = "ami-06e46074ae430fba6"
   instance_type = "t2.micro"
-  key_name = "demo"
+  key_name = "minikube"
 }
 
 resource "aws_lb_target_group" "mytg" {
@@ -78,7 +78,7 @@ resource "aws_autoscaling_group" "myAUG" {
   min_size           = 1
 
   launch_template {
-    id      = aws_launch_template.mytemplate.id
+    id      = aws_launch_template.newtemplate.id
     version = "$Latest"
   }
 }
