@@ -95,8 +95,3 @@ resource "aws_instance" "web" {
   private_ip                  = "192.168.2.10"  # Replace with your desired private IP address
   vpc_security_group_ids      = [aws_security_group.example_sg.id]
 }
-
-
-
-
-
