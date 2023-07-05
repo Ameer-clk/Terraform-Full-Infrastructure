@@ -44,7 +44,7 @@ resource "aws_security_group" "mysg" {
 
  resource "aws_ami_copy" "myami" {
   name              = "myami"
-  encrypted         = "true"
+  encrypted         = true
   description       = "creating new infra"
   source_ami_id     = "ami-06e46074ae430fba6"
   source_ami_region = "us-east-1"
