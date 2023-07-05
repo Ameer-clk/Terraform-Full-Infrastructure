@@ -104,4 +104,5 @@ resource "aws_cloudwatch_metric_alarm" "myalarm" {
 
 resource "aws_sns_topic" "newtopic" {
   name = "newtopic"
+  kms_master_key_id = "bfe2b7d4-cca1-4240-82f7-81ae2b9a55a0"
 }
