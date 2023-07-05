@@ -91,7 +91,6 @@ resource "aws_instance" "web" {
   instance_type               = "t2.micro"
   key_name                    = "new"
   associate_public_ip_address = false
-  root_block_device.encrypted = true
   subnet_id                   = aws_subnet.example_privatesubnet.id
   private_ip                  = "192.168.2.10"  # Replace with your desired private IP address
   vpc_security_group_ids      = [aws_security_group.example_sg.id]
