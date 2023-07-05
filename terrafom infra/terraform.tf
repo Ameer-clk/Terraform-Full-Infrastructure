@@ -72,7 +72,7 @@ resource "aws_lb" "my-lb" {
 }
 
 resource "aws_autoscaling_group" "myAUG" {
-  availability_zones = ["us-east-1a"]
+  availability_zones = ["us-east-1a", "us-east-1b"]
   desired_capacity   = 1
   max_size           = 2
   min_size           = 1
