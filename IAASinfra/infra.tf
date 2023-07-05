@@ -66,6 +66,7 @@ resource "aws_lb_target_group" "mytarget" {
 resource "aws_lb" "mylb" {
   name               = "mylb"
   internal           = false
+  drop_invalid_header_fields = true 
   load_balancer_type = "application"
   security_groups    = [aws_security_group.mysg.id]
   subnets            = [aws_subnet.subnet1.id,aws_subnet.subnet2.id]
