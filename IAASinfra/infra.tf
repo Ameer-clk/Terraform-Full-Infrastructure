@@ -67,7 +67,7 @@ resource "aws_lb_target_group" "mytarget" {
 
 resource "aws_lb" "mylb" {
   name               = "mylb"
-  internal           = false
+  internal           = true
   drop_invalid_header_fields = true 
   load_balancer_type = "application"
   security_groups    = [aws_security_group.mysg.id]
