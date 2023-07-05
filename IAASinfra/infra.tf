@@ -88,7 +88,6 @@ resource "aws_autoscaling_group" "newaug" {
  
  resource "aws_s3_bucket" "myb8ucket96339" {
   bucket = "mybucket96339"
-  versioning.enabled = true
  }
 
 resource "aws_cloudwatch_metric_alarm" "myalarm" {
