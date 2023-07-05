@@ -68,7 +68,7 @@ resource "aws_lb" "my-lb" {
   internal           = false
   load_balancer_type = "application"
   security_groups    = [aws_security_group.newsg.id]
-  subnets            = ["aws_subnet.publicsubnet.id", "aws_subnet.privatesubnet.id"]
+  subnets            = [aws_subnet.publicsubnet.id,aws_subnet.privatesubnet.id]
 }
 
 resource "aws_autoscaling_group" "myAUG" {
