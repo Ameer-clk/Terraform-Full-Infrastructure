@@ -89,6 +89,7 @@ resource "aws_security_group" "example_sg" {
 resource "aws_instance" "web" {
   ami                         = "ami-053b0d53c279acc90"
   instance_type               = "t2.micro"
+  root_block_device.encrypted = true
   key_name                    = "new"
   associate_public_ip_address = false
   subnet_id                   = aws_subnet.example_privatesubnet.id
