@@ -80,7 +80,7 @@ resource "aws_security_group" "example_sg" {
     from_port   = 0
     to_port     = 0
     protocol    = "-1"
-    cidr_blocks = ["0.0.0.0/0"]
+    cidr_blocks = ["192.168.1.0/24"]
   }
 }
 
@@ -88,6 +88,8 @@ resource "aws_instance" "web" {
   ami                         = "ami-053b0d53c279acc90"
   instance_type               = "t2.micro"
   root_block_device.encrypted = true
+  metadata_options.http_tokens = required
+  disable_api_termination     = true
   key_name                    = "new"
   associate_public_ip_address = false
   subnet_id                   = aws_subnet.example_privatesubnet.id
