@@ -85,11 +85,13 @@ resource "aws_security_group" "example_sg" {
 }
 
 resource "aws_instance" "web" {
-  ami                         = "ami-053b0d53c279acc90"
+  ami                         = "ami-007855asjsjjsjsj"
   instance_type               = "t2.micro"
-  root_block_device.encrypted = true
+  root_block_device {
+    encrypted = true
+  }
   disable_api_termination     = true
-  key_name                    = "new"
+  key_name                    = "minikube"
   associate_public_ip_address = false
   subnet_id                   = aws_subnet.example_privatesubnet.id
   private_ip                  = "192.168.2.10"  # Replace with your desired private IP address
