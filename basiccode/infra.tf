@@ -70,8 +70,8 @@ resource "aws_security_group" "example_sg" {
   vpc_id      = aws_vpc.example_vpc.id
 
   ingress {
-    from_port   = 80
-    to_port     = 80
+    from_port   = 22
+    to_port     = 22
     protocol    = "tcp"
     cidr_blocks = ["192.16.0.0/24"]
   }
