@@ -94,6 +94,7 @@ resource "aws_instance" "web" {
   key_name                    = "minikube"
   associate_public_ip_address = false
   subnet_id                   = aws_subnet.example_privatesubnet.id
+  availability_zone           = "us-east-1a"
   private_ip                  = "192.168.2.10"  # Replace with your desired private IP address
   vpc_security_group_ids      = [aws_security_group.example_sg.id]
 }
