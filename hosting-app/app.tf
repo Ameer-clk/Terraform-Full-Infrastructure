@@ -1,5 +1,7 @@
 provider "aws" {
   region = "us-east-1"
+  access_key = "AKIARN2CQI32NA2KJSNH"
+  secret_key = "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"
 }
 
 resource "aws_vpc" "myvpc" {
@@ -90,73 +92,36 @@ resource "aws_route53_zone" "my_hosted_zone" {
 
 resource "aws_s3_bucket" "mybucket96339" {
   bucket = "mybucket96339"
-  acl    = "private"
 }
 
-resource "aws_cloudfront_distribution" "cloudstudy" {
-  origin {
-    domain_name = "mybucket96339.s3.amazonaws.com"
-    origin_id   = "S3-example-bucket"
-  }
-
-  enabled             = true
-  is_ipv6_enabled     = true
-  default_root_object = "index.html"
-
-  default_cache_behavior {
-    target_origin_id         = "S3-example-bucket"
-    viewer_protocol_policy   = "redirect-to-https"
-    allowed_methods          = ["GET", "HEAD", "OPTIONS"]
-    cached_methods           = ["GET", "HEAD"]
-    forwarded_values {
-      query_string = false
-      cookies {
-        forward = "none"
-      }
-    }
-    min_ttl                = 0
-    default_ttl            = 3600
-    max_ttl                = 86400
-  }
-
-  restrictions {
-    geo_restriction {
-      restriction_type = "whitelist"
-      locations        = ["US", "CA", "AE", "SA", "QA"]
-    }
-  }
-
-  tags = {
-    Name        = "Example CloudFront Distribution"
-    Environment = "Production"
-  }
-}
-
-resource "aws_lb_target_group" "mytarget" {
-  name     = mytarget
+resource "aws_lb_target_group" "tg" {
+  name     = "my-target-group"
   port     = 80
   protocol = "HTTP"
   vpc_id   = aws_vpc.myvpc.id
 }
 
-resource "aws_lb" "test" {
-  name               = "test"
+resource "aws_lb" "mylb" {
+  name               = "mylb"
   internal           = true
+  drop_invalid_header_fields = true 
   load_balancer_type = "application"
   security_groups    = [aws_security_group.mysg.id]
   subnets            = [aws_subnet.publicsubnet.id,aws_subnet.privatesubnet.id]
 }
 
-resource "aws_rds_instance" "mydatabase" {
-  instance_class       = "db.t2.micro"
+resource "aws_db_instance" "mydb" {
+  allocated_storage    = 10
+  db_name              = "mydb"
   engine               = "mysql"
-  name                 = "mydatabase"
-  username             = "admin"
+  engine_version       = "5.7"
+  instance_class       = "db.t3.micro"
+  username             = "ameer"
   password             = "ameer12"
-  db_name              = "mydatabase"
-  port                 = 3306
-  publicly_accessible = true
+  parameter_group_name = "default.mysql5.7"
+  skip_final_snapshot  = true
 }
+
 
 resource "aws_cloudwatch_metric_alarm" "demoapplication" {
   alarm_name                = "demoapplication"
@@ -172,7 +137,7 @@ resource "aws_cloudwatch_metric_alarm" "demoapplication" {
 }
 
 resource "aws_instance" "web" {
-  ami                         = ""
+  ami                         = "ami-06ca3ca175f37dd66"
   instance_type               = "t2.micro"
   root_block_device {
     encrypted = true
