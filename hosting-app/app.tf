@@ -1,7 +1,7 @@
 provider "aws" {
   region = "us-east-1"
-  access_key = "AKIARN2CQI32NA2KJSNH"
-  secret_key = "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"
+  access_key = ""
+  secret_key = ""
 }
 
 resource "aws_vpc" "myvpc" {
@@ -73,6 +73,13 @@ resource "aws_security_group" "mysg" {
     cidr_blocks = ["0.0.0.0/0"]
   }
 
+  ingree {
+    from_port = 3306
+    to_port = 3306
+    protocol = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+
   egress {
     from_port   = 0
     to_port     = 0
@@ -110,19 +117,6 @@ resource "aws_lb" "mylb" {
   subnets            = [aws_subnet.publicsubnet.id,aws_subnet.privatesubnet.id]
 }
 
-resource "aws_db_instance" "mydb" {
-  allocated_storage    = 10
-  db_name              = "mydb"
-  engine               = "mysql"
-  engine_version       = "5.7"
-  instance_class       = "db.t3.micro"
-  username             = "ameer"
-  password             = "ameer12"
-  parameter_group_name = "default.mysql5.7"
-  skip_final_snapshot  = true
-}
-
-
 resource "aws_cloudwatch_metric_alarm" "demoapplication" {
   alarm_name                = "demoapplication"
   comparison_operator       = "GreaterThanOrEqualToThreshold"
@@ -149,4 +143,23 @@ resource "aws_instance" "web" {
   availability_zone           = "us-east-1a"
   private_ip                  = "192.168.20.10"  # Replace with your desired private IP address
   vpc_security_group_ids      = [aws_security_group.mysg.id]
+
+  # Add the RDS instance as a dependency
+  depends_on = [aws_db_instance.mydatabase]
 }
+
+output "instance_private_ip" {
+  value = aws_instance.web.private_ip
+}
+
+resource "aws_db_instance" "mydatabase" {
+  instance_class       = "db.t2.micro"
+  engine               = "mysql"
+  name                 = "mydatabase"
+  username             = "admin"
+  password             = "ameer12"
+  db_name              = "mydatabase"
+  port                 = 3306
+  publicly_accessible = true
+}
+
