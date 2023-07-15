@@ -79,11 +79,10 @@ resource "aws_security_group" "mysg" {
   }
 }
 
-
 resource "aws_acm_certificate" "cert" {
   domain_name       = "cloudstud.one"
   validation_method = "DNS"
-
+}
 
 resource "aws_route53_zone" "my_hosted_zone" {
   name = "cloudstudy.one"
