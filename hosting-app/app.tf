@@ -42,12 +42,12 @@ resource "aws_route" "privateroute" {
   gateway_id             = aws_internet_gateway.myinternetgateway.id
 }
 
-resource "aws_subnet_association" "publicsubnetassociation" {
+resource "aws_route_table_association" "publicsubnetassociation" {
   subnet_id       = aws_subnet.publicsubnet.id
   route_table_id  = aws_route_table.publicroutetable.id
 }
 
-resource "aws_subnet_association" "privatesubnetassociation" {
+resource "aws_route_table_association" "privatesubnetassociation" {
   subnet_id       = aws_subnet.privatesubnet.id
   route_table_id  = aws_route_table.privateroutetable.id
 }
@@ -132,15 +132,15 @@ resource "aws_cloudfront_distribution" "cloudstudy" {
   }
 }
 
-resource "aws_lb_target_group" "mytg" {
-  name     = mytg
+resource "aws_lb_target_group" "mytarget" {
+  name     = mytarget
   port     = 80
   protocol = "HTTP"
   vpc_id   = aws_vpc.myvpc.id
 }
 
 resource "aws_lb" "test" {
-  name               = "test-lb-tf"
+  name               = "test"
   internal           = true
   load_balancer_type = "application"
   security_groups    = [aws_security_group.mysg.id]
@@ -172,7 +172,7 @@ resource "aws_cloudwatch_metric_alarm" "demoapplication" {
 }
 
 resource "aws_instance" "web" {
-  ami                         = "ami-007855asjsjjsjsj"
+  ami                         = ""
   instance_type               = "t2.micro"
   root_block_device {
     encrypted = true
@@ -185,4 +185,3 @@ resource "aws_instance" "web" {
   private_ip                  = "192.168.20.10"  # Replace with your desired private IP address
   vpc_security_group_ids      = [aws_security_group.mysg.id]
 }
-
