@@ -3,7 +3,7 @@ provider "aws" {
 }
 
 resource "aws_vpc" "myvpc" {
-  cidr = "192.168.0.0/16"
+  cidr_block = "192.168.0.0/16"
 }
 
 resource "aws_subnet" "publicsubnet" {
