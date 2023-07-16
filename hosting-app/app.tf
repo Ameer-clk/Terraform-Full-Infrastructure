@@ -15,7 +15,7 @@ resource "aws_subnet" "publicsubnet" {
 resource "aws_subnet" "privatesubnet" {
   vpc_id            = aws_vpc.myvpc.id
   cidr_block        = "192.168.20.0/24"
-  availability_zone = "us-east-1b"
+  availability_zone = "us-east-1a"
 }
 
 resource "aws_route_table" "publicroutetable" {
@@ -61,28 +61,28 @@ resource "aws_security_group" "mysg" {
     from_port   = 22
     to_port     = 22
     protocol    = "tcp"
-    cidr_blocks = ["192.168.20.0/0"]
+    cidr_blocks = ["0.0.0.0/0"]
   }
 
   ingress {
     from_port   = 80
     to_port     = 80
     protocol    = "tcp"
-    cidr_blocks = ["192.168.20.0/0"]
+    cidr_blocks = ["0.0.0.0/0"]
   }
 
   ingress {
-    from_port = 3306
-    to_port = 3306
-    protocol = "tcp"
-    cidr_blocks = ["192.168.20.0/0"]
+    from_port   = 3306
+    to_port     = 3306
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
   }
 
   egress {
     from_port   = 0
     to_port     = 0
     protocol    = "-1"
-    cidr_blocks = ["192.168.20.0/0"]
+    cidr_blocks = ["0.0.0.0/0"]
   }
 }
 
@@ -112,7 +112,7 @@ resource "aws_lb" "mylb" {
   drop_invalid_header_fields = true 
   load_balancer_type = "application"
   security_groups    = [aws_security_group.mysg.id]
-  subnets            = [aws_subnet.publicsubnet.id,aws_subnet.privatesubnet.id]
+  subnets            = [aws_subnet.publicsubnet.id, aws_subnet.privatesubnet.id]
 }
 
 resource "aws_cloudwatch_metric_alarm" "demoapplication" {
@@ -128,28 +128,6 @@ resource "aws_cloudwatch_metric_alarm" "demoapplication" {
   insufficient_data_actions = []
 }
 
-resource "aws_instance" "web" {
-  ami                         = "ami-06ca3ca175f37dd66"
-  instance_type               = "t2.micro"
-  root_block_device {
-    encrypted = true
-  }
-  disable_api_termination     = true
-  key_name                    = "minikube"
-  associate_public_ip_address = true
-  subnet_id                   = aws_subnet.privatesubnet.id
-  availability_zone           = "us-east-1a"
-  private_ip                  = "192.168.20.10"  # Replace with your desired private IP address
-  vpc_security_group_ids      = [aws_security_group.mysg.id]
-
-  # Add the RDS instance as a dependency
-  depends_on = [aws_db_instance.mydatabase]
-}
-
-output "instance_private_ip" {
-  value = aws_instance.web.private_ip
-}
-
 resource "aws_db_instance" "mydatabase" {
   identifier             = "mydatabase"
   instance_class         = "db.t2.micro"
@@ -163,4 +141,26 @@ resource "aws_db_instance" "mydatabase" {
   storage_encrypted      = false
   vpc_security_group_ids = [aws_security_group.mysg.id]
   vpc_id                 = aws_vpc.myvpc.id
+}
+
+resource "aws_instance" "web" {
+  ami                         = "ami-06ca3ca175f37dd66"
+  instance_type               = "t2.micro"
+  root_block_device {
+    encrypted = true
+  }
+  disable_api_termination     = true
+  key_name                    = "minikube"
+  associate_public_ip_address = true
+  subnet_id                   = aws_subnet.privatesubnet.id
+  availability_zone           = "us-east-1a"
+  private_ip                  = "192.168.20.10"
+  vpc_security_group_ids      = [aws_security_group.mysg.id]
+
+  # Add the RDS instance as a dependency
+  depends_on = [aws_db_instance.mydatabase]
+}
+
+output "instance_private_ip" {
+  value = aws_instance.web.private_ip
 }
