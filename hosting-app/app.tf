@@ -151,17 +151,15 @@ output "instance_private_ip" {
 }
 
 resource "aws_db_instance" "mydatabase" {
-  identifier           = "mydatabase"
-  instance_class       = "db.t2.micro"
-  engine               = "mysql"
-  storage_encrypted    = true 
-  name                 = "mydatabase"
-  username             = "admin"
-  password             = "ameer12"
-  db_name              = "mydatabase"
-  port                 = 3306
-  publicly_accessible = false
-  allocated_storage     = 20
+  identifier             = "mydatabase"
+  instance_class         = "db.t2.micro"
+  engine                 = "mysql"
+  username               = "admin"
+  password               = "ameer12"
+  name                   = "mydatabase"
+  port                   = 3306
+  publicly_accessible   = true
+  allocated_storage      = 20
   backup_retention_period = 1
+  storage_encrypted      = false
 }
-
