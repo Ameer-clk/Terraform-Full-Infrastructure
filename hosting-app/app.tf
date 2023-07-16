@@ -161,7 +161,7 @@ resource "aws_db_instance" "mydatabase" {
   db_name              = "mydatabase"
   port                 = 3306
   publicly_accessible = false
-  publicly_accessible = true
+  allocated_storage     = 20
   backup_retention_period = 1
 }
 
