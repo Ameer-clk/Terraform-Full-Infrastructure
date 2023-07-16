@@ -140,7 +140,6 @@ resource "aws_db_instance" "mydatabase" {
   backup_retention_period = 1
   storage_encrypted      = false
   vpc_security_group_ids = [aws_security_group.mysg.id]
-  vpc_id                 = aws_vpc.myvpc.id
 }
 
 resource "aws_instance" "web" {
