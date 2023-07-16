@@ -71,7 +71,7 @@ resource "aws_security_group" "mysg" {
     cidr_blocks = ["192.168.20.0/0"]
   }
 
-  ingree {
+  ingress {
     from_port = 3306
     to_port = 3306
     protocol = "tcp"
@@ -156,10 +156,11 @@ resource "aws_db_instance" "mydatabase" {
   engine                 = "mysql"
   username               = "admin"
   password               = "ameer12"
-  name                   = "mydatabase"
   port                   = 3306
   publicly_accessible   = true
   allocated_storage      = 20
   backup_retention_period = 1
   storage_encrypted      = false
+  vpc_security_group_ids = [aws_security_group.mysg.id]
+  vpc_id                 = aws_vpc.myvpc.id
 }
