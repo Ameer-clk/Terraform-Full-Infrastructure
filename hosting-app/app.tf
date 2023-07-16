@@ -1,7 +1,5 @@
 provider "aws" {
   region = "us-east-1"
-  access_key = ""
-  secret_key = ""
 }
 
 resource "aws_vpc" "myvpc" {
@@ -63,28 +61,28 @@ resource "aws_security_group" "mysg" {
     from_port   = 22
     to_port     = 22
     protocol    = "tcp"
-    cidr_blocks = ["0.0.0.0/0"]
+    cidr_blocks = ["192.168.20.0/0"]
   }
 
   ingress {
     from_port   = 80
     to_port     = 80
     protocol    = "tcp"
-    cidr_blocks = ["0.0.0.0/0"]
+    cidr_blocks = ["192.168.20.0/0"]
   }
 
   ingree {
     from_port = 3306
     to_port = 3306
     protocol = "tcp"
-    cidr_blocks = ["0.0.0.0/0"]
+    cidr_blocks = ["192.168.20.0/0"]
   }
 
   egress {
     from_port   = 0
     to_port     = 0
     protocol    = "-1"
-    cidr_blocks = ["0.0.0.0/0"]
+    cidr_blocks = ["192.168.20.0/0"]
   }
 }
 
@@ -155,11 +153,14 @@ output "instance_private_ip" {
 resource "aws_db_instance" "mydatabase" {
   instance_class       = "db.t2.micro"
   engine               = "mysql"
+  resource.backup_retention_period = 1
+  iam_database_authentication_enabled = true
+  storage_encrypted    = true 
   name                 = "mydatabase"
   username             = "admin"
   password             = "ameer12"
   db_name              = "mydatabase"
   port                 = 3306
-  publicly_accessible = true
+  publicly_accessible = false
 }
 
