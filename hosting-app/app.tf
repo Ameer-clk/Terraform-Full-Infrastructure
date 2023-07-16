@@ -151,6 +151,7 @@ output "instance_private_ip" {
 }
 
 resource "aws_db_instance" "mydatabase" {
+  identifier           = "mydatabase"
   instance_class       = "db.t2.micro"
   engine               = "mysql"
   storage_encrypted    = true 
