@@ -155,6 +155,5 @@ resource "aws_instance" "web" {
   subnet_id                   = aws_subnet.privatesubnet.id
   availability_zone           = "us-east-1b"
   private_ip                  = "192.168.20.10"
-  vpc_id                      = aws_vpc.myvpc.id
   vpc_security_group_ids      = [aws_security_group.mysg.id]
-
+}
