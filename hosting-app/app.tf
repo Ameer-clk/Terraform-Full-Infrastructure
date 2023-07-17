@@ -15,7 +15,7 @@ resource "aws_subnet" "publicsubnet" {
 resource "aws_subnet" "privatesubnet" {
   vpc_id            = aws_vpc.myvpc.id
   cidr_block        = "192.168.20.0/24"
-  availability_zone = "us-east-1a"
+  availability_zone = "us-east-1b"
 }
 
 resource "aws_route_table" "publicroutetable" {
@@ -133,7 +133,7 @@ resource "aws_db_instance" "mydatabase" {
   instance_class         = "db.t2.micro"
   engine                 = "mysql"
   username               = "admin"
-  password               = "ameer12"
+  password               = "passwd"
   port                   = 3306
   publicly_accessible   = true
   allocated_storage      = 20
@@ -144,7 +144,7 @@ resource "aws_db_instance" "mydatabase" {
 }
 
 resource "aws_instance" "web" {
-  ami                         = "ami-06ca3ca175f37dd66"
+  ami                         = "ami"
   instance_type               = "t2.micro"
   root_block_device {
     encrypted = true
@@ -153,7 +153,7 @@ resource "aws_instance" "web" {
   key_name                    = "minikube"
   associate_public_ip_address = true
   subnet_id                   = aws_subnet.privatesubnet.id
-  availability_zone           = "us-east-1a"
+  availability_zone           = "us-east-1b"
   private_ip                  = "192.168.20.10"
   vpc_id                      = aws_vpc.myvpc.id
   vpc_security_group_ids      = [aws_security_group.mysg.id, aws_db_instance.mydatabase.vpc_security_group_ids[0]]
