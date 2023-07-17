@@ -156,12 +156,5 @@ resource "aws_instance" "web" {
   availability_zone           = "us-east-1b"
   private_ip                  = "192.168.20.10"
   vpc_id                      = aws_vpc.myvpc.id
-  vpc_security_group_ids      = [aws_security_group.mysg.id, aws_db_instance.mydatabase.vpc_security_group_ids[0]]
+  vpc_security_group_ids      = [aws_security_group.mysg.id]
 
-  # Add the RDS instance as a dependency
-  depends_on = [aws_db_instance.mydatabase]
-}
-
-output "instance_private_ip" {
-  value = aws_instance.web.private_ip
-}
