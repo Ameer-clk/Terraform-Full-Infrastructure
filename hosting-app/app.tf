@@ -99,29 +99,6 @@ resource "aws_s3_bucket" "mybucket96339" {
   bucket = "mybucket96339"
 }
 
-resource "aws_s3_bucket_policy" "bucket_policy" {
-  bucket = aws_s3_bucket.mybucket96339.id
-
-  policy = <<EOF
-{
-  "Version": "2012-10-17",
-  "Statement": [
-    {
-      "Sid": "AllowDelete",
-      "Effect": "Allow",
-      "Principal": "*",
-      "Action": [
-        "s3:DeleteObject",
-        "s3:DeleteObjectVersion"
-      ],
-      "Resource": [
-        "arn:aws:s3:::${aws_s3_bucket.mybucket96339.id}/*"
-      ]
-    }
-  ]
-}
-EOF
-}
 resource "aws_lb_target_group" "tg" {
   name     = "my-target-group"
   port     = 80
@@ -162,6 +139,7 @@ resource "aws_db_instance" "mydatabase" {
   allocated_storage      = 20
   backup_retention_period = 1
   storage_encrypted      = false
+  
   vpc_security_group_ids = [aws_security_group.mysg.id]
 }
 
@@ -178,7 +156,7 @@ resource "aws_instance" "web" {
   availability_zone           = "us-east-1a"
   private_ip                  = "192.168.20.10"
   vpc_id                      = aws_vpc.myvpc.id
-  vpc_security_group_ids      = [aws_security_group.mysg.id]
+  vpc_security_group_ids      = [aws_security_group.mysg.id, aws_db_instance.mydatabase.vpc_security_group_ids[0]]
 
   # Add the RDS instance as a dependency
   depends_on = [aws_db_instance.mydatabase]
