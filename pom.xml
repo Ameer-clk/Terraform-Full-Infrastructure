@@ -37,6 +37,18 @@
                         <artifactId>sonar-maven-plugin</artifactId>
                         <version>3.9.0.2155</version>
                     </plugin>
+                    <plugin>
+                        <groupId>com.github.aquasecurity</groupId>
+                        <artifactId>tfsec-maven-plugin</artifactId>
+                        <version>1.4.0</version>
+                        <executions>
+                            <execution>
+                                <goals>
+                                    <goal>scan</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                    </plugin>
                 </plugins>
             </build>
         </profile>
@@ -45,7 +57,7 @@
     <repositories>
         <repository>
             <id>central</id>
-            <url>https://repo.maven.apache.org/maven2</url>
+            <url>https://repo.maven.apache.org/maven3</url>
             <releases>
                 <enabled>true</enabled>
             </releases>
@@ -58,7 +70,7 @@
     <pluginRepositories>
         <pluginRepository>
             <id>central</id>
-            <url>https://repo.maven.apache.org/maven2</url>
+            <url>https://repo.maven.apache.org/maven3</url>
             <releases>
                 <enabled>true</enabled>
             </releases>
@@ -67,18 +79,5 @@
             </snapshots>
         </pluginRepository>
     </pluginRepositories>
-    
-        <dependencies>
-    <dependency>
-        <groupId>com.github.aquasecurity</groupId>
-        <artifactId>tfsec-maven-plugin</artifactId>
-        <version>1.4.0</version>
-        <executions>
-            <execution>
-                <goals>
-                    <goal>scan</goal>
-                </goals>
-            </execution>
-        </executions>
-    </dependency>
-</dependencies>
+
+</project>
