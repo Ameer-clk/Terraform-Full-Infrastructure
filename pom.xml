@@ -57,7 +57,7 @@
     <repositories>
         <repository>
             <id>central</id>
-            <url>https://repo.maven.apache.org/maven3</url>
+            <url>https://repo.maven.apache.org/maven2</url>
             <releases>
                 <enabled>true</enabled>
             </releases>
@@ -70,7 +70,7 @@
     <pluginRepositories>
         <pluginRepository>
             <id>central</id>
-            <url>https://repo.maven.apache.org/maven3</url>
+            <url>https://repo.maven.apache.org/maven2</url>
             <releases>
                 <enabled>true</enabled>
             </releases>
