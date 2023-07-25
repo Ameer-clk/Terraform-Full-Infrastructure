@@ -92,7 +92,7 @@ resource "aws_instance" "web" {
   }
   disable_api_termination     = true
   key_name                    = "minikube"
-  associate_public_ip_address = false
+  associate_public_ip_address = true
   subnet_id                   = aws_subnet.example_privatesubnet.id
   availability_zone           = "us-east-1a"
   private_ip                  = "192.168.2.10"  # Replace with your desired private IP address
