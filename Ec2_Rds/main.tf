@@ -1,7 +1,5 @@
 provider "aws" {
   region = "us-east-1"
-  access_key = ""
-  secret_key = ""
 }
 
 resource "aws_vpc" "example_vpc" {
@@ -118,7 +116,8 @@ resource "aws_db_instance" "mydatabase" {
   multi_az                 = false
   storage_type             = "gp2"
   storage_encrypted        = true
-  publicly_accessible      = true
+  iam_database_authentication_enabled = true
+  publicly_accessible      = false
 
  # Associate the RDS instance with the subnet group
   db_subnet_group_name     = aws_db_subnet_group.mydatabase_subnet_group.name
