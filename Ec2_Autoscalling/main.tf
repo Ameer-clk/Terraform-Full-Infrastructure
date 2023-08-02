@@ -97,10 +97,10 @@ resource "aws_security_group" "example_sg" {
   vpc_id      = aws_vpc.example_vpc.id
 
    ingress {
-     from_port   = 80
-     to_port     = 80
+     from_port   = 22
+     to_port     = 22
      protocol    = "tcp"
-     cidr_blocks = ["0.0.0.0/0"]
+     cidr_blocks = ["10.1.0.0/0"]
    }
    egress {
      from_port   = 0
@@ -114,6 +114,7 @@ resource "aws_security_group" "example_sg" {
 resource "aws_ebs_volume" "myebs" {
   availability_zone = "us-east-1a"
   size              = 8
+  encrypted         = true
   tags = {
     Name = "Example EBS Volume"
   }
