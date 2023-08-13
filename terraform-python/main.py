@@ -1,5 +1,3 @@
-from hcl2 import hcl
-
 config = {
     "provider": {
         "aws": {
@@ -190,5 +188,8 @@ config = {
                 "min_size": 1,
                 "max_size": 2,
                 "desired_capacity": 1,
-                "health_check_type":
-
+                "health_check_type": "ELB"  # Use "EC2" for EC2 instance health check
+            }
+        }
+    }
+}
