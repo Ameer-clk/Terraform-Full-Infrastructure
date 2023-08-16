@@ -92,7 +92,7 @@ resource "aws_internet_gateway" "myigw" {
 
 #Create Security group 
 resource "aws_security_group" "example_sg" {
-  name        = "my-sg"
+  name        = "example_sg"
   description = "For the ifra"
   vpc_id      = aws_vpc.example_vpc.id
 
