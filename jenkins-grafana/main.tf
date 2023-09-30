@@ -1,17 +1,7 @@
-terraform {
-  cloud {
-    organization = "ameeraligithub"
-
-    workspaces {
-      name = "newproject"
-    }
-  }
-}
-
 provider "aws" {
     region = "us-east-1"
-    access_key = "AKIAXS7PNQRWLKFSAV3I"
-    secret_key = "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"
+    access_key = ""
+    secret_key = ""
 }
 
 // Create a Grafana 
@@ -164,7 +154,7 @@ resource "aws_security_group" "jenkinssg" {
 
 // Create an Instance for Grafana Server
 resource "aws_instance" "grafanainstance" {
-  ami           = "ami-053b0d53c279acc90"
+  ami           = "image id"
   instance_type = "t3.small"
   key_name      = "demo"
   associate_public_ip_address = true
@@ -236,7 +226,7 @@ fi
 
 // Create an Instance for Jenkins server 
 resource "aws_instance" "jenkinsinstance" {
-  ami           = "ami-053b0d53c279acc90"
+  ami           = "image id"
   instance_type = "t2.small"
   key_name      = "demo"
   associate_public_ip_address = true
