@@ -4,9 +4,9 @@ provider "aws" {
     secret_key = ""
 }
 
-// Create a Grafana 
+// Create a Vpc Grafana
 resource "aws_vpc" "grafanavpc" {
-    cidr_block = "172.16.0.0/16"
+    cidr_block = "172.16.0.0/16"    # Give your desired Ip address 
 }
 
 // Create a Vpc for Jenkins
@@ -18,14 +18,14 @@ resource "aws_vpc" "jenkinsvpc" {
 resource "aws_subnet" "grafanasubnet" {
     vpc_id = aws_vpc.grafanavpc.id
     cidr_block = "172.16.10.0/24"
-    availability_zone = "us-east-1a"
+    availability_zone = "us-east-1a"  # Give your desired zone 
 }
 
 // Create a Subnet for the Jenkins 
 resource "aws_subnet" "jenkinssubnet" {
     vpc_id = aws_vpc.jenkinsvpc.id
     cidr_block = "172.17.10.0/24"
-    availability_zone =  "us-east-1b"
+    availability_zone = "us-east-1b"
 }
 
 // Create a Internet Gateway for Grafana
@@ -154,9 +154,9 @@ resource "aws_security_group" "jenkinssg" {
 
 // Create an Instance for Grafana Server
 resource "aws_instance" "grafanainstance" {
-  ami           = "image id"
-  instance_type = "t3.small"
-  key_name      = "demo"
+  ami           = "image id"          # Give your desired AMI Image
+  instance_type = "t2.micro"          # Give your desired Instance type 
+  key_name      = "demo"              # Give your desired keyname
   associate_public_ip_address = true
   private_ip    = "172.16.10.10"
   subnet_id     = aws_subnet.grafanasubnet.id
