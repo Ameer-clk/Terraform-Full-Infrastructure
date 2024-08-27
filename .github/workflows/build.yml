@@ -1,30 +1,22 @@
-name: Snyk Code Scan
-
+---
+name: Scanning Terraform Code
 on:
   push:
     branches:
-      - main
-  pull_request:
-    branches:
-      - main
-
+      - main 
 jobs:
-  snyk:
+  build:
+
     runs-on: ubuntu-latest
-
     steps:
-    - name: Checkout code
-      uses: actions/checkout@v2
-
-    - name: Set up Node.js
-      uses: actions/setup-node@v2
-      with:
-        node-version: '14'
-
-    - name: Install Snyk
-      run: npm install -g snyk
-
-    - name: Run Snyk to check for vulnerabilities
-      env:
-        SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
-      run: snyk test
+      - uses: actions/checkout@v2
+      - name: Set up Python 3.8
+        uses: actions/setup-python@v4
+        with:
+          python-version: 3.8
+      - name: Test with Checkov
+        id: checkov
+        uses: bridgecrewio/checkov-action@master
+        with:
+          directory: example/examplea
+          framework: terraform 
