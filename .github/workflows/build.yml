@@ -18,5 +18,5 @@ jobs:
         id: checkov
         uses: bridgecrewio/checkov-action@master
         with:
-          directory: ./Terraform-Full-Infrastructure/Ec2_Autoscalling
+          directory: ./Terraform-Full-Infrastructure/complex
           framework: terraform 
