@@ -1,22 +1,24 @@
----
-name: Scanning Terraform Code
+name: build
 on:
   push:
     branches:
       - main
+  pull_request:
 jobs:
   build:
-
-    runs-on: ubuntu-latest
+    name: Build
+    runs-on: ubuntu-20.04
     steps:
-      - uses: actions/checkout@v2
-      - name: Set up Python 3.8
-        uses: actions/setup-python@v4
+      - name: Checkout code
+        uses: actions/checkout@v3
+      - name: Build an image from Dockerfile
+        run: docker build -t docker.io/my-organization/my-app:${{ github.sha }} .
+      - name: Run Trivy vulnerability scanner
+        uses: aquasecurity/trivy-action@0.28.0
         with:
-          python-version: 3.8
-      - name: Test with Checkov
-        id: checkov
-        uses: bridgecrewio/checkov-action@master
-        with:
-          directory: ./Terraform-Full-Infrastructure/complex
-          framework: terraform 
+          image-ref: 'docker.io/my-organization/my-app:${{ github.sha }}'
+          format: 'table'
+          exit-code: '1'
+          ignore-unfixed: true
+          vuln-type: 'os,library'
+          severity: 'CRITICAL,HIGH'
