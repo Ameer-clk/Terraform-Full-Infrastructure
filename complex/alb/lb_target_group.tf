@@ -1,8 +1,15 @@
+data "aws_vpc" "selected" {
+  filter {
+    name   = "tag:Name"
+    values = ["project636beta-vpc"]
+  }
+}
+
 resource "aws_lb_target_group" "k8-airflow" {
   name     = "k8-airflow"
   port     = 8080
   protocol = "HTTP"
-  vpc_id   = "vpc-026cf352a9c7840a0" #Replace with the 
+  vpc_id   = data.aws_vpc.selected.id
   target_type = "ip"
 
   health_check {
@@ -29,7 +36,7 @@ resource "aws_lb_target_group" "k8-argocd" {
   name     = "k8-argocd"
   port     = 8080
   protocol = "HTTPS"
-  vpc_id   = "vpc-026cf352a9c7840a0" #Add the vpc id here
+  vpc_id   = data.aws_vpc.selected.id
   target_type = "ip"
 
 
@@ -57,7 +64,7 @@ resource "aws_lb_target_group" "k8-backoffice" {
   name     = "k8-backoffice"
   port     = 3000
   protocol = "HTTP"
-  vpc_id   = "vpc-026cf352a9c7840a0" #Add the vpc id here
+  vpc_id   = data.aws_vpc.selected.id
   target_type = "ip"
 
 
@@ -85,7 +92,7 @@ resource "aws_lb_target_group" "k8-cmsadmin" {
   name     = "k8-cmsadmin"
   port     = 4005
   protocol = "HTTP"
-  vpc_id   = "vpc-026cf352a9c7840a0" #Add the vpc id here
+  vpc_id   = data.aws_vpc.selected.id
   target_type = "ip"
 
   health_check {
@@ -112,7 +119,7 @@ resource "aws_lb_target_group" "k8-cmsapi" {
   name     = "k8-cmdapi"
   port     = 5000
   protocol = "HTTP"
-  vpc_id   = "vpc-026cf352a9c7840a0" #Add the vpc id here
+  vpc_id   = data.aws_vpc.selected.id
   target_type = "ip"
 
 
@@ -140,7 +147,7 @@ resource "aws_lb_target_group" "k8-crmadmin" {
   name     = "k8-crmadmin"
   port     = 8080
   protocol = "HTTP"
-  vpc_id   = "vpc-026cf352a9c7840a0" #Add the vpc id here
+  vpc_id   = data.aws_vpc.selected.id
   target_type = "ip"
 
   health_check {
@@ -167,7 +174,7 @@ resource "aws_lb_target_group" "k8-mainfrontend" {
   name     = "k8-mainfrontend"
   port     = 3000
   protocol = "HTTP"
-  vpc_id   = "vpc-026cf352a9c7840a0" #Add the vpc id here
+  vpc_id   = data.aws_vpc.selected.id
   target_type = "ip"
 
 
@@ -195,7 +202,7 @@ resource "aws_lb_target_group" "k8-owneradmin" {
   name     = "k8-owneradmin"
   port     = 8080
   protocol = "HTTP"
-  vpc_id   = "vpc-026cf352a9c7840a0" #Add the vpc id here
+  vpc_id   = data.aws_vpc.selected.id
   target_type = "ip"
 
 
@@ -223,7 +230,7 @@ resource "aws_lb_target_group" "k8-whitelabel" {
   name     = "k8-whitelabel"
   port     = 8080
   protocol = "HTTP"
-  vpc_id   = "vpc-026cf352a9c7840a0" #Add the vpc id here
+  vpc_id   = data.aws_vpc.selected.id
   target_type = "ip"
 
 
@@ -241,17 +248,17 @@ resource "aws_lb_target_group" "k8-whitelabel" {
   }
 }
 
-resource "aws_lb_target_group_attachment" "k8-whitelabel-attachment" {
-  target_group_arn = aws_lb_target_group.k8-whitelabel.arn
+resource "aws_lb_target_group_attachment" "k8-whitelabel-1-attachment" {
+  target_group_arn = aws_lb_target_group.k8-whitelabel-1.arn
   target_id        = "10.2.0.80"
   port             = 8080
 }
 
-resource "aws_lb_target_group" "k8-whitelabel" {
-  name     = "k8-whitelabel"
+resource "aws_lb_target_group" "k8-whitelabel-1" {
+  name     = "k8-whitelabel-1"
   port     = 4000
   protocol = "HTTP"
-  vpc_id   = "vpc-026cf352a9c7840a0" #Add the vpc id here
+  vpc_id   = data.aws_vpc.selected.id
   target_type = "ip"
 
 
@@ -265,7 +272,7 @@ resource "aws_lb_target_group" "k8-whitelabel" {
   }
 
   tags = {
-    "Name" = "k8-whitelabel"
+    "Name" = "k8-whitelabel-1"
   }
 }
 
@@ -275,11 +282,11 @@ resource "aws_lb_target_group_attachment" "k8-whitelabel-attachment" {
   port             = 4000
 }
 
-resource "aws_lb_target_group" "k8-central-provider-socket" {
-  name     = "k8-central-provider-socket"
+resource "aws_lb_target_group" "k8-central-provider-socket-1" {
+  name     = "k8-central-provider-socket-1"
   port     = 8001
   protocol = "HTTP"
-  vpc_id   = "vpc-026cf352a9c7840a0" #Add the vpc id here
+  vpc_id   = data.aws_vpc.selected.id
   target_type = "ip"
 
 
@@ -293,15 +300,21 @@ resource "aws_lb_target_group" "k8-central-provider-socket" {
   }
 
   tags = {
-    "Name" = "k8-central-provider-socket"
+    "Name" = "k8-central-provider-socket-1"
   }
+}
+
+resource "aws_lb_target_group_attachment" "k8-central-provider-socket-1-attachment" {
+  target_group_arn = aws_lb_target_group.k8-central-provider-socket-1.arn
+  target_id        = "10.2.0.90"
+  port             = 8080
 }
 
 resource "aws_lb_target_group" "k8-central-provider-socket" {
   name     = "k8-central-provider-socket"
   port     = 8000
   protocol = "HTTP"
-  vpc_id   = "vpc-026cf352a9c7840a0" #Add the vpc id here
+  vpc_id   = data.aws_vpc.selected.id
   target_type = "ip"
 
 
@@ -315,10 +328,9 @@ resource "aws_lb_target_group" "k8-central-provider-socket" {
   }
 
   tags = {
-    "Name" = "k8-central-provider-socket"
+    "Name" = "k8-central-provider-socket-1"
   }
 }
-
 
 resource "aws_lb_target_group_attachment" "k8-central-provider-socket-attachment" {
   target_group_arn = aws_lb_target_group.k8-central-provider-socket.arn
@@ -330,7 +342,7 @@ resource "aws_lb_target_group" "k8-elastic-stack" {
   name     = "k8-elastic-stack"
   port     = 5601
   protocol = "HTTPS"
-  vpc_id   = "vpc-026cf352a9c7840a0" #Add the vpc id here
+  vpc_id   = data.aws_vpc.selected.id
   target_type = "ip"
 
 
@@ -358,7 +370,7 @@ resource "aws_lb_target_group" "k8-grafana" {
   name     = "k8-grafana"
   port     = 3000
   protocol = "HTTP"
-  vpc_id   = "vpc-026cf352a9c7840a0" #Add the vpc id here
+  vpc_id   = data.aws_vpc.selected.id
   target_type = "ip"
 
 
@@ -386,7 +398,7 @@ resource "aws_lb_target_group" "k8-owner-api" {
   name     = "k8-owner-api"
   port     = 3000
   protocol = "HTTP"
-  vpc_id   = "vpc-026cf352a9c7840a0" #Add the vpc id here
+  vpc_id   = data.aws_vpc.selected.id
   target_type = "ip"
 
 
@@ -414,7 +426,7 @@ resource "aws_lb_target_group" "k8-pg-admin" {
   name     = "k8-pg-admin"
   port     = 80
   protocol = "HTTP"
-  vpc_id   = "vpc-026cf352a9c7840a0" #Add the vpc id here
+  vpc_id   = data.aws_vpc.selected.id
   target_type = "ip"
 
 
