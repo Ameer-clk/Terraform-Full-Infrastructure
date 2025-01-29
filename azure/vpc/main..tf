@@ -18,7 +18,6 @@ module "prod-project636-vnet" {
 
   vnet_name     = "prod-project636-vnet"
   address_space = "10.2.0.0/16" # Provide the address space as a string
-
   subnet_names    = ["public-subnet-1", "public-subnet-2", "public-subnet-3", "private-subnet-1", "private-subnet-2", "private-subnet-3"]
   subnet_prefixes = ["10.2.0.0/22", "10.2.4.0/22", "10.2.24.0/22", "10.2.8.0/22", "10.2.12.0/22", "10.2.16.0/22"]
 
