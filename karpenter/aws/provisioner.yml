@@ -1,0 +1,28 @@
+apiVersion: karpenter.k8s.aws/v1alpha5
+kind: Provisioner
+metadata:
+  name: default
+spec:
+  requirements:
+    - key: "node.kubernetes.io/instance-type"
+      operator: In
+      values: ["t3.medium", "m5.large", "c5.large"]  # AWS EC2 instance types
+    - key: "topology.kubernetes.io/zone"
+      operator: In
+      values: ["us-east-1a", "us-east-1b"]  # Define AWS availability zones
+    - key: "kubernetes.io/arch"
+      operator: In
+      values: ["amd64"]
+    - key: "kubernetes.io/os"
+      operator: In
+      values: ["linux"]
+  limits:
+    resources:
+      cpu: "1000"  # Max CPU in cores for this provisioner
+      memory: "200Gi"  # Max memory for nodes created by this provisioner
+  provider:
+    subnetSelector:
+      karpenter.sh/discovery: "your-cluster-name"  # Subnet discovery tag
+    securityGroupSelector:
+      karpenter.sh/discovery: "your-cluster-name"  # Security group discovery tag
+  ttlSecondsAfterEmpty: 30  # Nodes will be removed after 30s of being unused

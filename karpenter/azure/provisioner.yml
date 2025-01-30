@@ -1,0 +1,29 @@
+apiVersion: karpenter.sh/v1alpha5
+kind: Provisioner
+metadata:
+  name: default
+spec:
+  capacity:
+    instanceType: Standard_D2s_v3  # Specify the Azure VM instance type
+    zones: ["eastus", "eastus2"]    # Define the availability zones for the nodes
+  requirements:
+    - key: "kubernetes.io/arch"
+      operator: In
+      values: ["amd64"]
+    - key: "kubernetes.io/os"
+      operator: In
+      values: ["linux"]
+  limits:
+    resources:
+      cpu: "1000"  # Max CPU in cores for this Provisioner
+      memory: "200Gi"  # Max memory for nodes created by this provisioner
+  provider:
+    type: azure
+    azure:
+      subscriptionID: 2824b061-b318-4703-b222-a5c7b90310ce
+      resourceGroup: prod-project636-rg
+      vnetName: prod-project636-vnet
+      subnetName: private-subnet-1
+      instanceTypes:
+        - "Standard_D2s_v3"
+        - "Standard_D4s_v3"
