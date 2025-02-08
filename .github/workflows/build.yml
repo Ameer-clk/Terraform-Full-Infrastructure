@@ -7,7 +7,7 @@ on:
 jobs:
   build:
 
-    runs-on: eks_runner
+    runs-on: ubunut-latest
     steps:
       - uses: actions/checkout@v2
       - name: Set up Python 3.8
