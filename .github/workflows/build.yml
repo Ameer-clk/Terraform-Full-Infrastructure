@@ -28,7 +28,7 @@ jobs:
         id: checkov
         uses: bridgecrewio/checkov-action@master
         with:
-          directory: ./Terraform-Full-Infrastructure/gaming-infra # Scan the root directory or specify the correct subdirectory
+          directory: .Ameer-clk/Terraform-Full-Infrastructure/gaming-infra # Scan the root directory or specify the correct subdirectory
           framework: terraform
           soft_fail: false  # Set to true if you want to allow failures without breaking the pipeline
           quiet: false  # Set to true for less verbose output
