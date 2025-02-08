@@ -22,6 +22,11 @@ data "aws_security_group" "project636beta_sg" {
 resource "aws_instance" "project636beta_instance" {
   ami                         = "ami-00eb69d236edcfaf8" # Replace with the Ubuntu AMI Image
   instance_type               = "t2.micro" # Replace with the desired instance type
+  metadata_options {
+     http_endpoint = "enabled"
++    http_tokens   = "required"
+  }
+}
   root_block_device {
     encrypted = true
   }
