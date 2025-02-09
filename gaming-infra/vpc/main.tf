@@ -1,5 +1,6 @@
 module "prod-project636-vpc" {
-  source = "terraform-aws-modules/vpc/aws"
+  source = "git::https://github.com/terraform-aws-modules/terraform-aws-vpc.git?ref=26c38a66f12e7c6c93b6a2ba127ad68981a48671"  # commit hash of version 5.0.0
+
 
   name = "prod-project636-vpc"
   cidr = "10.2.0.0/16"
