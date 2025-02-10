@@ -1,5 +1,11 @@
+resource "aws_kms_key" "rds_kms_key" {
+  description             = "KMS key for RDS Proxy Secret encryption"
+  enable_key_rotation     = true
+}
+
 resource "aws_secretsmanager_secret" "rds_proxy_secret" {
   name = "rds_proxy_secret"
+  kms_key_id = "arn:aws:kms:region:account-id:key/key-id"  # Replace with your actual KMS key ARN
 }
 
 resource "aws_secretsmanager_secret_version" "rds_proxy_secret_version" {
@@ -61,7 +67,14 @@ resource "aws_iam_policy" "rds_proxy_policy" {
           "secretsmanager:DescribeSecret",
           "rds-db:connect"
         ]
-        Resource = "*"
+        Resource = "arn:aws:secretsmanager:us-east-1:123456789012:secret:rds_proxy_secret*"
+      },
+      {
+        Effect = "Allow"
+        Action = [
+          "rds-db:connect"
+        ]
+        Resource = "arn:aws:rds-db:us-east-1:123456789012:dbuser:my-db-instance/my-db-user" #Provide the db instance id and user name
       }
     ]
   })
@@ -97,7 +110,7 @@ data "aws_security_group" "existing_sg" {
 }
 
 module "db" {
-  source = "terraform-aws-modules/rds/aws"
+  source  = "git::https://github.com/terraform-aws-modules/terraform-aws-rds.git?ref=7b9a0f6"
 
   identifier         = "prod-project636" # Give desired name for the DB
   engine             = "postgres"
