@@ -33,7 +33,7 @@ module "prod-project636-vpc" {
 resource "aws_security_group" "prod_project636_sg" {
   name        = "prod-project636-sg"
   description = "Security Group with restricted access"
-  vpc_id      = module.prod_project636_vpc.vpc_id
+  vpc_id      = module.prod-project636-vpc.vpc_id
 
   # Restrict inbound traffic to HTTPS (443) only from a trusted CIDR range
   ingress {
