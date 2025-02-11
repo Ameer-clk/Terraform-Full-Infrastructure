@@ -1,22 +1,39 @@
+# Create a KMS key for RDS Proxy Secret encryption
 resource "aws_kms_key" "rds_kms_key" {
-  description             = "KMS key for RDS Proxy Secret encryption"
-  enable_key_rotation     = true
+  description         = "KMS key for RDS Proxy Secret encryption"
+  enable_key_rotation = true
 }
 
+# Create an AWS Secrets Manager secret
 resource "aws_secretsmanager_secret" "rds_proxy_secret" {
-  name = "rds_proxy_secret"
-  kms_key_id = "arn:aws:kms:us-east-1:181928972329:key/rds_kms_key"  # Replace with your actual KMS key ARN
+  name        = "rds_proxy_secret"
+  kms_key_id  = aws_kms_key.rds_kms_key.arn  # Use a dynamic reference instead of a hardcoded ARN
 }
+
+# Store database credentials securely (avoid hardcoded values)
+variable "db_username" {}
+variable "db_password" {}
 
 resource "aws_secretsmanager_secret_version" "rds_proxy_secret_version" {
   secret_id = aws_secretsmanager_secret.rds_proxy_secret.id
   secret_string = jsonencode({
-    username = "postgres"
-    password = "spmpdw1(<gX2vPJ[ICS8D<sO#Gx]"  # Replace with your actual password
+    username = var.db_username
+    password = var.db_password
   })
 }
 
-resource "aws_db_proxy" "prod-project636-proxy" {
+# Set up secret rotation
+resource "aws_secretsmanager_secret_rotation" "rds_proxy_rotation" {
+  secret_id           = aws_secretsmanager_secret.rds_proxy_secret.id
+  rotation_lambda_arn = aws_lambda_function.example.arn
+
+  rotation_rules {
+    automatically_after_days = 30
+  }
+}
+
+# Create an AWS RDS Proxy
+resource "aws_db_proxy" "prod_project636_proxy" {
   name                   = "prod-project636beta-proxy"
   engine_family          = "POSTGRESQL"
   role_arn               = aws_iam_role.rds_proxy_role.arn
@@ -31,12 +48,14 @@ resource "aws_db_proxy" "prod-project636-proxy" {
   }
 }
 
+# Attach RDS Proxy to the target database
 resource "aws_db_proxy_target" "prod_project636_target" {
-  db_proxy_name          = aws_db_proxy.prod-project636-proxy.name
-  target_group_name      = "default"  # You can specify a custom target group name if needed
-  db_instance_identifier = "prod-project636"  # Use the identifier directly
+  db_proxy_name          = aws_db_proxy.prod_project636_proxy.name
+  target_group_name      = "default"
+  db_instance_identifier = "prod-project636"
 }
 
+# IAM Role for RDS Proxy
 resource "aws_iam_role" "rds_proxy_role" {
   name = "rds_proxy_role"
 
@@ -54,6 +73,7 @@ resource "aws_iam_role" "rds_proxy_role" {
   })
 }
 
+# IAM Policy for accessing Secrets Manager and RDS
 resource "aws_iam_policy" "rds_proxy_policy" {
   name = "rds_proxy_policy"
 
@@ -65,21 +85,23 @@ resource "aws_iam_policy" "rds_proxy_policy" {
         Action = [
           "secretsmanager:GetSecretValue",
           "secretsmanager:DescribeSecret",
+          "secretsmanager:UpdateSecretVersionStage",  # Ensure secret rotation can update the secret
           "rds-db:connect"
         ]
-        Resource = "arn:aws:secretsmanager:us-east-1:123456789012:secret:rds_proxy_secret*"
+        Resource = aws_secretsmanager_secret.rds_proxy_secret.arn
       },
       {
         Effect = "Allow"
         Action = [
           "rds-db:connect"
         ]
-        Resource = "arn:aws:rds-db:us-east-1:123456789012:dbuser:my-db-instance/my-db-user" #Provide the db instance id and user name
+        Resource = "arn:aws:rds-db:us-east-1:123456789012:dbuser:my-db-instance/my-db-user"
       }
     ]
   })
 }
 
+# Attach IAM policy to RDS Proxy role
 resource "aws_iam_role_policy_attachment" "rds_proxy_policy_attachment" {
   role       = aws_iam_role.rds_proxy_role.name
   policy_arn = aws_iam_policy.rds_proxy_policy.arn
