@@ -1,7 +1,34 @@
-# Create a KMS key for RDS Proxy Secret encryption
 resource "aws_kms_key" "rds_kms_key" {
   description         = "KMS key for RDS Proxy Secret encryption"
   enable_key_rotation = true
+
+  policy = jsonencode({
+    Version = "2012-10-17"
+    Id      = "kms-key-policy"
+    Statement = [
+      {
+        Sid       = "EnableIAMUserPermissions"
+        Effect    = "Allow"
+        Principal = {
+          AWS = "arn:aws:iam::${var.aws_account_id}:root"
+        }
+        Action    = "kms:*"
+        Resource  = "*"
+      },
+      {
+        Sid    = "AllowRDSProxyToUseKMS"
+        Effect = "Allow"
+        Principal = {
+          Service = "rds.amazonaws.com"
+        }
+        Action = [
+          "kms:Decrypt",
+          "kms:DescribeKey"
+        ]
+        Resource = "*"
+      }
+    ]
+  })
 }
 
 # Create an AWS Secrets Manager secret
