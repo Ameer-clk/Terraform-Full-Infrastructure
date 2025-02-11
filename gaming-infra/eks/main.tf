@@ -36,10 +36,10 @@ resource "aws_iam_role_policy_attachment" "eks_vpc_resource_attachment" {
   role       = aws_iam_role.eks_role_prod.name
 }
 
-# Define the correct IAM Policy for EBS CSI Driver
+# IAM Policy for EBS CSI Driver with Least Privilege
 resource "aws_iam_policy" "prod_ebs_csi_driver_policy" {
   name        = "AmazonEBSCSIDriverPolicy"
-  description = "Policy for EBS CSI driver for EKS"
+  description = "Policy for EBS CSI driver for EKS with least privilege"
   policy      = jsonencode({
     Version = "2012-10-17",
     Statement = [
@@ -57,7 +57,10 @@ resource "aws_iam_policy" "prod_ebs_csi_driver_policy" {
                 "ec2:DescribeVolumes",
                 "ec2:DescribeVolumesModifications"
             ],
-            "Resource": "*"
+            "Resource": [
+                "arn:aws:ec2:*:*:volume/*",
+                "arn:aws:ec2:*:*:snapshot/*"
+            ]
         },
         {
             "Effect": "Allow",
@@ -92,7 +95,9 @@ resource "aws_iam_policy" "prod_ebs_csi_driver_policy" {
             "Action": [
                 "ec2:CreateVolume"
             ],
-            "Resource": "*",
+            "Resource": [
+                "arn:aws:ec2:*:*:volume/*"
+            ],
             "Condition": {
                 "StringLike": {
                     "aws:RequestTag/ebs.csi.aws.com/cluster": "true"
@@ -104,7 +109,9 @@ resource "aws_iam_policy" "prod_ebs_csi_driver_policy" {
             "Action": [
                 "ec2:CreateVolume"
             ],
-            "Resource": "*",
+            "Resource": [
+                "arn:aws:ec2:*:*:volume/*"
+            ],
             "Condition": {
                 "StringLike": {
                     "aws:RequestTag/CSIVolumeName": "*"
@@ -116,7 +123,9 @@ resource "aws_iam_policy" "prod_ebs_csi_driver_policy" {
             "Action": [
                 "ec2:DeleteVolume"
             ],
-            "Resource": "*",
+            "Resource": [
+                "arn:aws:ec2:*:*:volume/*"
+            ],
             "Condition": {
                 "StringLike": {
                     "ec2:ResourceTag/ebs.csi.aws.com/cluster": "true"
@@ -128,7 +137,9 @@ resource "aws_iam_policy" "prod_ebs_csi_driver_policy" {
             "Action": [
                 "ec2:DeleteVolume"
             ],
-            "Resource": "*",
+            "Resource": [
+                "arn:aws:ec2:*:*:volume/*"
+            ],
             "Condition": {
                 "StringLike": {
                     "ec2:ResourceTag/CSIVolumeName": "*"
@@ -140,7 +151,9 @@ resource "aws_iam_policy" "prod_ebs_csi_driver_policy" {
             "Action": [
                 "ec2:DeleteVolume"
             ],
-            "Resource": "*",
+            "Resource": [
+                "arn:aws:ec2:*:*:volume/*"
+            ],
             "Condition": {
                 "StringLike": {
                     "ec2:ResourceTag/kubernetes.io/created-for/pvc/name": "*"
@@ -152,7 +165,9 @@ resource "aws_iam_policy" "prod_ebs_csi_driver_policy" {
             "Action": [
                 "ec2:DeleteSnapshot"
             ],
-            "Resource": "*",
+            "Resource": [
+                "arn:aws:ec2:*:*:snapshot/*"
+            ],
             "Condition": {
                 "StringLike": {
                     "ec2:ResourceTag/CSIVolumeSnapshotName": "*"
@@ -164,31 +179,15 @@ resource "aws_iam_policy" "prod_ebs_csi_driver_policy" {
             "Action": [
                 "ec2:DeleteSnapshot"
             ],
-            "Resource": "*",
+            "Resource": [
+                "arn:aws:ec2:*:*:snapshot/*"
+            ],
             "Condition": {
                 "StringLike": {
                     "ec2:ResourceTag/ebs.csi.aws.com/cluster": "true"
                 }
             }
         }
-    ]
-  })
-}
-
-# Create the IAM Role for EBS CSI Driver
-resource "aws_iam_role" "prod_ebs_csi_driver_role" {
-  name = "prod-eks-cluster-ebs-csi-driver-role"
-
-  assume_role_policy = jsonencode({
-    Version = "2012-10-17"
-    Statement = [
-      {
-        Effect = "Allow"
-        Principal = {
-          Service = "eks.amazonaws.com"
-        }
-        Action = "sts:AssumeRole"
-      }
     ]
   })
 }
