@@ -41,7 +41,7 @@ resource "aws_security_group" "prod-project636-sg" {
     from_port        = 443
     to_port          = 443
     protocol         = "tcp"
-    security_groups = [aws_security_group.prod-project636-sg.id]
+    cidr_blocks      =   ["10.2.8.0/22"]
   }
 
   egress {
