@@ -5,7 +5,7 @@ resource "aws_kms_key" "rds_kms_key" {
 
 resource "aws_secretsmanager_secret" "rds_proxy_secret" {
   name = "rds_proxy_secret"
-  kms_key_id = "arn:aws:kms:region:account-id:key/key-id"  # Replace with your actual KMS key ARN
+  kms_key_id = "arn:aws:kms:us-east-1:181928972329:key/rds_kms_key"  # Replace with your actual KMS key ARN
 }
 
 resource "aws_secretsmanager_secret_version" "rds_proxy_secret_version" {
