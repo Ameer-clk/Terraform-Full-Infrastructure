@@ -37,27 +37,11 @@ resource "aws_security_group" "prod-project636-sg" {
   vpc_id      = module.prod-project636-vpc.vpc_id
 
   ingress {
-    description      = "Allow HTTP"
-    from_port        = 80
-    to_port          = 80
-    protocol         = "tcp"
-    cidr_blocks      = ["0.0.0.0/0"]
-  }
-
-  ingress {
     description      = "Allow HTTPS"
     from_port        = 443
     to_port          = 443
     protocol         = "tcp"
-    cidr_blocks      = ["0.0.0.0/0"]
-  }
-
-  ingress {
-    description      = "Allow SSH"
-    from_port        = 22
-    to_port          = 22
-    protocol         = "tcp"
-    cidr_blocks      = ["0.0.0.0/0"]
+    security_groups = [aws_security_group.prod-project636-sg.id]
   }
 
   egress {
@@ -74,60 +58,3 @@ resource "aws_security_group" "prod-project636-sg" {
   }
 }
 
-# Custom Security Group
-resource "aws_security_group" "prod-rds-project636-sg" {
-  name        = "prod-rds-project636-sg"
-  description = "Define the custom port to add in the security group"
-  vpc_id      = module.prod-project636-vpc.vpc_id
-
-
-  ingress {
-    description      = "Allow SSH"
-    from_port        = 5432
-    to_port          = 5432
-    protocol         = "tcp"
-    cidr_blocks      = ["0.0.0.0/0"]
-  }
-
-    egress {
-    description      = "Allow all outbound traffic"
-    from_port        = 0
-    to_port          = 0
-    protocol         = "-1"
-    cidr_blocks      = ["0.0.0.0/0"]
-  }
-
-  tags = {
-    Name        = "prod-rds-project636-sg"
-    Environment = "dev"
-  }
-}
-
-# Custom Security Group
-resource "aws_security_group" "prod-elasticache-project636-sg" {
-  name        = "prod-elasticache-project636-sg"
-  description = "Define the custom port to add in the security group"
-  vpc_id      = module.prod-project636-vpc.vpc_id
-
-
-  ingress {
-    description      = "Allow SSH"
-    from_port        = 6379
-    to_port          = 6379
-    protocol         = "tcp"
-    cidr_blocks      = ["0.0.0.0/0"]
-  }
-
-    egress {
-    description      = "Allow all outbound traffic"
-    from_port        = 0
-    to_port          = 0
-    protocol         = "-1"
-    cidr_blocks      = ["0.0.0.0/0"]
-  }
-
-      tags = {
-    Name        = "prod-elasticache-project636-sg"
-    Environment = "dev"
-  }
-}
