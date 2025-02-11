@@ -30,30 +30,34 @@ module "prod-project636-vpc" {
   }
 }
 
-# Custom Security Group
-resource "aws_security_group" "prod-project636-sg" {
+resource "aws_security_group" "prod_project636_sg" {
   name        = "prod-project636-sg"
-  description = "Define the custom port to add in the security group"
-  vpc_id      = module.prod-project636-vpc.vpc_id
+  description = "Security Group with restricted access"
+  vpc_id      = module.prod_project636_vpc.vpc_id
 
+  # Restrict inbound traffic to HTTPS (443) only from a trusted CIDR range
   ingress {
-    description      = "Allow HTTPS"
-    from_port        = 443
-    to_port          = 443
-    protocol         = "tcp"
-    cidr_blocks      =   ["10.2.8.0/22"]
-  }
-
-  egress {
+    description = "Allow HTTPS"
     from_port   = 443
     to_port     = 443
     protocol    = "tcp"
-    cidr_blocks = ["10.0.0.0/16"]  # Restrict to known, trusted destination
+    cidr_blocks = ["10.2.8.0/22"]  # Ensure this range is correct and secure
   }
-  
+
+  # Restrict outbound traffic to only necessary destinations
+  egress {
+    description = "Allow outbound HTTPS to specific services"
+    from_port   = 443
+    to_port     = 443
+    protocol    = "tcp"
+    cidr_blocks = [
+      "10.2.8.0/22",  # Internal VPC range
+      "10.1.0.0/24"   # Example trusted destination (modify as needed)
+    ]
+  }
+
   tags = {
     Name        = "prod-project636-sg"
-    Environment = "dev"
+    Environment = "prod"  # Changed from 'dev' to match 'prod' in the resource name
   }
 }
-
