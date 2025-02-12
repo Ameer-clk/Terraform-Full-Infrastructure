@@ -194,14 +194,14 @@ resource "aws_iam_policy" "prod_ebs_csi_driver_policy" {
 
 # Create the EKS Cluster
 module "eks" {
-  source  = "git::https://github.com/terraform-aws-modules/terraform-aws-eks.git?ref=v20.2.1"
+  source          = "git::https://github.com/terraform-aws-modules/terraform-aws-eks.git?ref=26c38a66f12e7c6c93b6a2ba127ad68981a48671"
   cluster_name    = "prod-project636-cluster"
   cluster_version = "1.31"
 
   cluster_endpoint_public_access  = true
 
   vpc_id                   = data.aws_vpc.existing_vpc.id
-  subnet_ids               = ["subnet-03a36fdb089ab69cb", "subnet-00a6ef6bd8e6537b2", "subnet-05897fac09bd7e86d" , "subnet-0aed652824549f4b0" , "subnet-00a41e4b4b1c7390a" , "subnet-0eba50fb2b77914c4"]
+  subnet_ids               = ["subnet-0765a54fc272df21e", "subnet-0e40704d7c6581afd", "subnet-0a45e25ea76b27861"]
 
 
   eks_managed_node_groups = {
