@@ -23,13 +23,15 @@ resource "aws_instance" "project636beta_instance" {
   ami                         = "ami-00eb69d236edcfaf8" # Replace with the Ubuntu AMI Image
   instance_type               = "t2.micro" # Replace with the desired instance type
   metadata_options {
-     http_endpoint = "enabled"
-+    http_tokens   = "required"
+    http_endpoint = "enabled"
+    http_tokens   = "required"
   }
-}
+
   root_block_device {
     encrypted = true
+    volume_size = 20  # Example: specify the volume size, adjust as needed
   }
+
   disable_api_termination     = true
   key_name                    = "pilot-panel" # Replace with the key name
   associate_public_ip_address = false # Set to false as the instance is in a private subnet
