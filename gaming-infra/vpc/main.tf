@@ -35,7 +35,7 @@ module "prod-project636-vpc" {
 
   tags = {
     Terraform                                = "true"
-    Environment                              = "prod"
+    Environment                              = "test"
     "kubernetes.io/cluster/prod-project636-cluster" = "shared"
     "karpenter.sh/discovery"                 = "prod-project636-cluster"
   }
