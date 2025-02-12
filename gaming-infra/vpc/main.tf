@@ -1,44 +1,10 @@
-provider "aws" {
-  region = "us-east-1"
-}
-
-# Create S3 Bucket for Terraform State
-resource "aws_s3_bucket" "terraform_state" {
-  bucket = "terraformtfstate123ysd66"  # Make sure this bucket name is globally unique
-
-  lifecycle {
-    prevent_destroy = true  # Prevent accidental deletion
-  }
-}
-
-# Enable Versioning for the S3 Bucket to track changes to the state file
-resource "aws_s3_bucket_versioning" "versioning" {
-  bucket = aws_s3_bucket.terraform_state.id
-
-  versioning_configuration {
-    status = "Enabled"
-  }
-}
-
-# Create DynamoDB Table for State Locking
-resource "aws_dynamodb_table" "terraform_lock1" {
-  name         = "terraform-lock1"
-  billing_mode = "PAY_PER_REQUEST"
-  hash_key     = "LockID"
-
-  attribute {
-    name = "LockID"
-    type = "S"
-  }
-}
-
-# Backend Configuration to Store State in S3 and Use DynamoDB for Locking
+# Backend Configuration to Store State in Existing S3 and Use Existing DynamoDB for Locking
 terraform {
   backend "s3" {
-    bucket         = "erraformtfstate123ysd66"         # S3 bucket name
+    bucket         = "terraformtfstate123"         # Existing S3 bucket name
     key            = "eks/terraform.tfstate"      # State file path
     region         = "us-east-1"                  # AWS region
-    dynamodb_table = "terraform-lock1"             # DynamoDB table for state locking
+    dynamodb_table = "terraform-lock"             # Existing DynamoDB table for state locking
     encrypt        = true                         # Enable encryption
   }
 }
