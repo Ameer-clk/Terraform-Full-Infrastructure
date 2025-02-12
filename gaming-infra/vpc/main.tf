@@ -1,3 +1,48 @@
+provider "aws" {
+  region = "us-east-1"
+}
+
+# Create S3 Bucket for Terraform State
+resource "aws_s3_bucket" "terraform_state" {
+  bucket = "terraformtfstate123"  # Make sure this bucket name is globally unique
+
+  lifecycle {
+    prevent_destroy = true  # Prevent accidental deletion
+  }
+}
+
+# Enable Versioning for the S3 Bucket to track changes to the state file
+resource "aws_s3_bucket_versioning" "versioning" {
+  bucket = aws_s3_bucket.terraform_state.id
+
+  versioning_configuration {
+    status = "Enabled"
+  }
+}
+
+# Create DynamoDB Table for State Locking
+resource "aws_dynamodb_table" "terraform_lock" {
+  name         = "terraform-lock"
+  billing_mode = "PAY_PER_REQUEST"
+  hash_key     = "LockID"
+
+  attribute {
+    name = "LockID"
+    type = "S"
+  }
+}
+
+# Backend Configuration to Store State in S3 and Use DynamoDB for Locking
+terraform {
+  backend "s3" {
+    bucket         = "terraformtfstate123"         # S3 bucket name
+    key            = "eks/terraform.tfstate"      # State file path
+    region         = "us-east-1"                  # AWS region
+    dynamodb_table = "terraform-lock"             # DynamoDB table for state locking
+    encrypt        = true                         # Enable encryption
+  }
+}
+
 module "prod-project636-vpc" {
   source = "git::https://github.com/terraform-aws-modules/terraform-aws-vpc.git?ref=26c38a66f12e7c6c93b6a2ba127ad68981a48671"  # commit hash of version 5.0.0
 
