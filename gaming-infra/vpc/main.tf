@@ -1,3 +1,14 @@
+# Backend Configuration to Store State in Existing S3 and Use Existing DynamoDB for Locking
+terraform {
+  backend "s3" {
+    bucket         = "terraformtfstate123"         # Existing S3 bucket name
+    key            = "vpc/terraform.tfstate"      # State file path
+    region         = "us-east-1"                  # AWS region
+    dynamodb_table = "terraform-lock"             # Existing DynamoDB table for state locking
+    encrypt        = true                         # Enable encryption
+  }
+}
+
 module "prod-project636-vpc" {
   source = "git::https://github.com/terraform-aws-modules/terraform-aws-vpc.git?ref=26c38a66f12e7c6c93b6a2ba127ad68981a48671"  # commit hash of version 5.0.0
 
