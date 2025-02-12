@@ -194,7 +194,7 @@ resource "aws_iam_policy" "prod_ebs_csi_driver_policy" {
 
 # Create the EKS Cluster
 module "eks" {
-  source          = "git::https://github.com/terraform-aws-modules/terraform-aws-eks.git?ref=26c38a66f12e7c6c93b6a2ba127ad68981a48671"
+  source          = "terraform-aws-modules/eks/aws"
   cluster_name    = "prod-project636-cluster"
   cluster_version = "1.31"
 
