@@ -42,11 +42,16 @@ resource "aws_instance" "project636beta_instance" {
   depends_on                  = [data.aws_nat_gateway.existing_nat_gateway] # Ensure the NAT gateway is created first
 }
 
+resource "aws_kms_key" "ebs_encryption" {
+  description = "KMS key for EBS encryption"
+}
+
 resource "aws_ebs_volume" "project636beta_volume" {
   availability_zone = "us-east-2a" # Replace with your desired availability zone
   size              = 10           # Replace with the desired size in GB
   type              = "gp2"        # Replace with the desired volume type
   encrypted         = true
+  kms_key_id        = aws_kms_key.ebs_encryption.id
 }
 
 resource "aws_volume_attachment" "project636beta_attachment" {
