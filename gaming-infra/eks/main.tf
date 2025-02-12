@@ -25,18 +25,34 @@ resource "aws_iam_role" "eks_role_prod" {
   })
 }
 
-# Attach necessary policies to the IAM role
+# IAM Role for the EBS CSI Driver
+resource "aws_iam_role" "prod_ebs_csi_driver_role" {
+  name = "prod-ebs-csi-driver-role"
+  assume_role_policy = jsonencode({
+    Version = "2012-10-17"
+    Statement = [{
+      Effect = "Allow"
+      Principal = {
+        Service = "eks.amazonaws.com"
+      }
+      Action = "sts:AssumeRole"
+    }]
+  })
+}
+
+# IAM Policy for EBS CSI Driver with Full Access to EC2
 resource "aws_iam_role_policy_attachment" "eks_role_policy" {
   policy_arn = "arn:aws:iam::aws:policy/AmazonEKSServicePolicy"
   role       = aws_iam_role.eks_role_prod.name
 }
 
+# IAM Policy for EBS CSI Driver with Full Access to EKS Cluster Resources
 resource "aws_iam_role_policy_attachment" "eks_vpc_resource_attachment" {
   policy_arn = "arn:aws:iam::aws:policy/AmazonEKSClusterPolicy"  # Corrected policy ARN
   role       = aws_iam_role.eks_role_prod.name
 }
 
-# IAM Policy for EBS CSI Driver with Least Privilege
+# IAM Policy for EBS CSI Driver with Full Access to EC2 and EKS Cluster Resources
 resource "aws_iam_policy" "prod_ebs_csi_driver_policy" {
   name        = "AmazonEBSCSIDriverPolicy"
   description = "Policy for EBS CSI driver for EKS with least privilege"
