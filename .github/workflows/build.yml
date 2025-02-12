@@ -1,4 +1,4 @@
-name: Terrascan Security Scan
+name: Checkov Security Scan
 on:
   push:
     branches:
@@ -16,15 +16,19 @@ jobs:
         with:
           fetch-depth: 0  # Ensures the full repo is checked out
 
-      - name: Install Terrascan
-        run: |
-          curl -L "$(curl -s https://api.github.com/repos/tenable/terrascan/releases/latest | jq -r '.assets[] | select(.name | contains("Linux_x86_64")) | .browser_download_url')" -o terrascan
-          chmod +x terrascan
-          sudo mv terrascan /usr/local/bin/
+      - name: Set up Python 3.8
+        uses: actions/setup-python@v4
+        with:
+          python-version: 3.8
 
       - name: Verify Directory Structure (Debugging Step)
         run: ls -R
 
-      - name: Run Terrascan Security Scan
-        id: terrascan
-        run: terrascan scan -d ./gaming-infra -t aws -o json
+      - name: Run Checkov Security Scan
+        id: checkov
+        uses: bridgecrewio/checkov-action@master
+        with:
+          directory: ./gaming-infra # Scan the root directory or specify the correct subdirectory
+          framework: terraform
+          soft_fail: false  # Set to true if you want to allow failures without breaking the pipeline
+          quiet: false  # Set to true for less verbose output convert it in to terrascan code 
