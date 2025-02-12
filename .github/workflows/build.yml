@@ -23,6 +23,9 @@ jobs:
       - name: Verify Directory Structure (Debugging Step)
         run: ls -R
 
+      - name: Install jq (Dependency for Fetching Latest Terrascan)
+        run: sudo apt-get update && sudo apt-get install -y jq
+
       - name: Install Terrascan (Latest Version)
         run: |
           curl -L "$(curl -s https://api.github.com/repos/tenable/terrascan/releases/latest | jq -r '.assets[] | select(.name | test("Linux_x86_64.tar.gz$")) | .browser_download_url')" -o terrascan.tar.gz
@@ -36,4 +39,4 @@ jobs:
       - name: Run Terrascan Security Scan
         id: terrascan
         run: |
-          terrascan scan -t terraform -p ./gaming-infra # Adjust the path if needed
+          terrascan scan --iac-type terraform --iac-dir ./gaming-infra
