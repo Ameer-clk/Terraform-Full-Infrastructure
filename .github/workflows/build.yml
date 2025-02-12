@@ -1,4 +1,4 @@
-name: Checkov Security Scan
+name: Terrascan Security Scan
 on:
   push:
     branches:
@@ -24,11 +24,12 @@ jobs:
       - name: Verify Directory Structure (Debugging Step)
         run: ls -R
 
-      - name: Run Checkov Security Scan
-        id: checkov
-        uses: bridgecrewio/checkov-action@master
-        with:
-          directory: ./gaming-infra # Scan the root directory or specify the correct subdirectory
-          framework: terraform
-          soft_fail: false  # Set to true if you want to allow failures without breaking the pipeline
-          quiet: false  # Set to true for less verbose output convert it in to terrascan code 
+      - name: Install Terrascan
+        run: |
+          curl -s https://raw.githubusercontent.com/accurics/terrascan/main/scripts/install.sh | bash
+          sudo mv terrascan /usr/local/bin
+
+      - name: Run Terrascan Security Scan
+        id: terrascan
+        run: |
+          terrascan scan -t terraform -p ./gaming-infra # Scan the root directory or specify the correct subdirectory
