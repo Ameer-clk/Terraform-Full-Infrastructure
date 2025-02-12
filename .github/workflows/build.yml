@@ -38,12 +38,5 @@ jobs:
 
       - name: Run Terrascan Security Scan
         id: terrascan
-        continue-on-error: true  # Allow pipeline to continue even if violations are found
         run: |
-          terrascan scan --iac-type terraform --iac-dir ./gaming-infra --output json | tee terrascan-report.json
-
-      - name: Upload Terrascan Report (Artifacts)
-        uses: actions/upload-artifact@v3
-        with:
-          name: terrascan-report
-          path: terrascan-report.json
+          terrascan scan --iac-type terraform --iac-dir ./gaming-infra
