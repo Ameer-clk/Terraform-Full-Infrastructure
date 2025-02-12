@@ -1,4 +1,3 @@
-name: Terrascan Security Scan
 on:
   push:
     branches:
@@ -24,12 +23,17 @@ jobs:
       - name: Verify Directory Structure (Debugging Step)
         run: ls -R
 
-      - name: Install Terrascan
+      - name: Install Terrascan (Latest Version)
         run: |
-          curl -s https://raw.githubusercontent.com/accurics/terrascan/main/scripts/install.sh | bash
-          sudo mv terrascan /usr/local/bin
+          curl -L "$(curl -s https://api.github.com/repos/tenable/terrascan/releases/latest | jq -r '.assets[] | select(.name | test("Linux_x86_64.tar.gz$")) | .browser_download_url')" -o terrascan.tar.gz
+          tar -xvzf terrascan.tar.gz terrascan
+          chmod +x terrascan
+          sudo mv terrascan /usr/local/bin/
+
+      - name: Verify Terrascan Installation
+        run: terrascan version
 
       - name: Run Terrascan Security Scan
         id: terrascan
         run: |
-          terrascan scan -t terraform -p ./gaming-infra # Scan the root directory or specify the correct subdirectory
+          terrascan scan -t terraform -p ./gaming-infra # Adjust the path if needed
