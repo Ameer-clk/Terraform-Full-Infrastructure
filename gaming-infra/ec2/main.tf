@@ -80,11 +80,12 @@ resource "aws_instance" "project636beta_instance" {
 }
 
 # ----------------------
-# 📸 AWS EBS SNAPSHOT
+# 📸 AWS EBS SNAPSHOT (FIXED)
 # ----------------------
 resource "aws_ebs_snapshot" "project636beta_snapshot" {
-  volume_id = aws_ebs_volume.project636beta_volume.id
-  encrypted = true  # ✅ Enables encryption
+  volume_id  = aws_ebs_volume.project636beta_volume.id
+  encrypted  = true  # ✅ Enables encryption
+  kms_key_id = aws_kms_key.ebs_encryption.id  # ✅ Uses KMS for encryption (Fix)
 }
 
 # ----------------------
@@ -95,3 +96,4 @@ resource "aws_volume_attachment" "project636beta_attachment" {
   volume_id   = aws_ebs_volume.project636beta_volume.id
   instance_id = aws_instance.project636beta_instance.id
 }
+
