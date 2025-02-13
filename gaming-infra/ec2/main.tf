@@ -1,3 +1,13 @@
+terraform {
+  backend "s3" {
+    bucket         = "terraformtfstate13"         # Existing S3 bucket name
+    key            = "ec2/terraform.tfstate"      # State file path
+    region         = "us-east-1"                  # AWS region
+    dynamodb_table = "terraform-lock"             # Existing DynamoDB table for state locking
+    encrypt        = true                         # Enable encryption
+  }
+}
+
 data "aws_nat_gateway" "existing_nat_gateway" {
   filter {
     name   = "tag:Name"
