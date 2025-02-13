@@ -1,3 +1,13 @@
+terraform {
+  backend "s3" {
+    bucket         = "terraformtfstate13"         # Existing S3 bucket name
+    key            = "rds/terraform.tfstate"      # State file path
+    region         = "us-east-1"                  # AWS region
+    dynamodb_table = "terraform-lock"             # Existing DynamoDB table for state locking
+    encrypt        = true                         # Enable encryption
+  }
+}
+
 resource "aws_kms_key" "rds_kms_key" {
   description         = "KMS key for RDS Proxy Secret encryption"
   enable_key_rotation = true
