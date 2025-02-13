@@ -8,6 +8,9 @@ terraform {
   }
 }
 
+# ----------------------
+# 🔍 DATA SOURCES
+# ----------------------
 data "aws_nat_gateway" "existing_nat_gateway" {
   filter {
     name   = "tag:Name"
@@ -29,17 +32,41 @@ data "aws_security_group" "project636beta_sg" {
   }
 }
 
+# ----------------------
+# 🔐 AWS KMS KEY (EBS ENCRYPTION)
+# ----------------------
+resource "aws_kms_key" "ebs_encryption" {
+  description         = "KMS key for EBS encryption"
+  enable_key_rotation = true  # ✅ Enables automatic key rotation
+}
+
+# ----------------------
+# 📦 AWS EBS VOLUME
+# ----------------------
+resource "aws_ebs_volume" "project636beta_volume" {
+  availability_zone = "us-east-2a" # Replace with your desired availability zone
+  size              = 10           # Replace with the desired size in GB
+  type              = "gp2"        # Replace with the desired volume type
+  encrypted         = true
+  kms_key_id        = aws_kms_key.ebs_encryption.id
+}
+
+# ----------------------
+# 🏠 AWS EC2 INSTANCE
+# ----------------------
 resource "aws_instance" "project636beta_instance" {
   ami                         = "ami-00eb69d236edcfaf8" # Replace with the Ubuntu AMI Image
   instance_type               = "t2.micro" # Replace with the desired instance type
+  monitoring                  = true # ✅ Enables detailed monitoring
   metadata_options {
     http_endpoint = "enabled"
     http_tokens   = "required"
   }
 
   root_block_device {
-    encrypted = true
-    volume_size = 20  # Example: specify the volume size, adjust as needed
+    encrypted    = true
+    volume_size  = 20  # Example: specify the volume size, adjust as needed
+    kms_key_id   = aws_kms_key.ebs_encryption.id
   }
 
   disable_api_termination     = true
@@ -52,18 +79,17 @@ resource "aws_instance" "project636beta_instance" {
   depends_on                  = [data.aws_nat_gateway.existing_nat_gateway] # Ensure the NAT gateway is created first
 }
 
-resource "aws_kms_key" "ebs_encryption" {
-  description = "KMS key for EBS encryption"
+# ----------------------
+# 📸 AWS EBS SNAPSHOT
+# ----------------------
+resource "aws_ebs_snapshot" "project636beta_snapshot" {
+  volume_id = aws_ebs_volume.project636beta_volume.id
+  encrypted = true  # ✅ Enables encryption
 }
 
-resource "aws_ebs_volume" "project636beta_volume" {
-  availability_zone = "us-east-2a" # Replace with your desired availability zone
-  size              = 10           # Replace with the desired size in GB
-  type              = "gp2"        # Replace with the desired volume type
-  encrypted         = true
-  kms_key_id        = aws_kms_key.ebs_encryption.id
-}
-
+# ----------------------
+# 🔗 AWS VOLUME ATTACHMENT
+# ----------------------
 resource "aws_volume_attachment" "project636beta_attachment" {
   device_name = "/dev/sda2" # Replace with the desired device name
   volume_id   = aws_ebs_volume.project636beta_volume.id
