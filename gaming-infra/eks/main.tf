@@ -306,17 +306,3 @@ resource "aws_eks_addon" "eks_ebs_csi_driver_addon" {
     # Only include valid configuration options here if needed
   })
 }
-
-# Addon for Node Monitoring Agent
-resource "aws_eks_addon" "eks_Node_monitoring_agent" {
-  cluster_name                = "prod-project636-cluster"
-  addon_name                  = "node-monitoring-agent"  # Addon name for Node Monitoring Agent
-  addon_version               = "v1.0.1-eksbuild.2"       # Replace with the latest supported version
-  resolve_conflicts_on_create = "OVERWRITE"
-  resolve_conflicts_on_update = "OVERWRITE"
-
-  # Configuration values specific to Node Monitoring Agent can be added here
-  configuration_values = jsonencode({
-    # Example configuration options, if required
-  })
-}
