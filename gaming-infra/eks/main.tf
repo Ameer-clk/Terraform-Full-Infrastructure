@@ -1,7 +1,7 @@
 # Backend Configuration to Store State in Existing S3 and Use Existing DynamoDB for Locking
 terraform {
   backend "s3" {
-    bucket         = "terraformtfstate13"         # Existing S3 bucket name
+    bucket         = "terraformtfstate133"         # Existing S3 bucket name
     key            = "eks/terraform.tfstate"      # State file path
     region         = "us-east-1"                  # AWS region
     dynamodb_table = "terraform-lock"             # Existing DynamoDB table for state locking
