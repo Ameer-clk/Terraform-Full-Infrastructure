@@ -253,6 +253,10 @@ module "eks" {
   }
 }
 
+# Fetch the existing EKS cluster details
+data "aws_eks_cluster" "cluster" {
+  name = module.eks.cluster_name
+}
 
 # Install the VPC CNI add-on
 resource "aws_eks_addon" "eks_vpc_cni_addon" {
