@@ -1,13 +1,3 @@
-terraform {
-  backend "s3" {
-    bucket         = "terraformtfstate13"         # Existing S3 bucket name
-    key            = "eks/terraform.tfstate"      # State file path
-    region         = "us-east-1"                  # AWS region
-    dynamodb_table = "terraform-lock"             # Existing DynamoDB table for state locking
-    encrypt        = true                         # Enable encryption
-  }
-}
-
 # Data source to fetch existing VPC by name
 data "aws_vpc" "existing_vpc" {
   filter {
