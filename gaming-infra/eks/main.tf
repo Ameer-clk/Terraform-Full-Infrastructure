@@ -254,7 +254,7 @@ module "eks" {
 }
 
 # Fetch the existing EKS cluster details
-data "aws_eks_cluster" "cluster" {
+data "aws_eks_cluster" "prod-project636-cluster" {
   name = module.eks.cluster_name
 }
 
