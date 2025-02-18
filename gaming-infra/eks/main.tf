@@ -253,14 +253,14 @@ module "eks" {
   }
 }
 
-# Fetch the existing EKS cluster details
-data "aws_eks_cluster" "prod-project636-cluster" {
+# Fetch the existing EKS cluster details dynamically
+data "aws_eks_cluster" "eks" {
   name = module.eks.cluster_name
 }
 
 # Install the VPC CNI add-on
 resource "aws_eks_addon" "eks_vpc_cni_addon" {
-  cluster_name                = data.aws_eks_cluster.cluster.name
+  cluster_name                = data.aws_eks_cluster.eks.name
   addon_name                  = "vpc-cni"
   addon_version               = "v1.19.2-eksbuild.1" # Replace with a valid version if needed
   resolve_conflicts_on_create = "OVERWRITE"
@@ -273,7 +273,7 @@ resource "aws_eks_addon" "eks_vpc_cni_addon" {
 }
 
 resource "aws_eks_addon" "eks_coredns_addon" {
-  cluster_name                = data.aws_eks_cluster.cluster.name
+  cluster_name                = data.aws_eks_cluster.eks.name
   addon_name                  = "coredns"
   addon_version               = "v1.11.4-eksbuild.2"  # Replace with the latest supported version
   resolve_conflicts_on_create = "OVERWRITE"
@@ -286,7 +286,7 @@ resource "aws_eks_addon" "eks_coredns_addon" {
 }
 
 resource "aws_eks_addon" "eks_kube_proxy_addon" {
-  cluster_name                = data.aws_eks_cluster.cluster.name
+  cluster_name                = data.aws_eks_cluster.eks.name
   addon_name                  = "kube-proxy"
   addon_version               = "v1.31.3-eksbuild.2"  # Replace with the latest supported version
   resolve_conflicts_on_create = "OVERWRITE"
@@ -299,7 +299,7 @@ resource "aws_eks_addon" "eks_kube_proxy_addon" {
 }
 
 resource "aws_eks_addon" "eks_ebs_csi_driver_addon" {
-  cluster_name                = data.aws_eks_cluster.cluster.name
+  cluster_name                = data.aws_eks_cluster.eks.name
   addon_name                  = "aws-ebs-csi-driver"
   addon_version               = "v1.38.1-eksbuild.1"  # Replace with the latest supported version
   resolve_conflicts_on_create = "OVERWRITE"
