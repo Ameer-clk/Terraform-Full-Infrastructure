@@ -228,7 +228,7 @@ module "eks" {
   cluster_endpoint_public_access  = true
 
   vpc_id                   = data.aws_vpc.existing_vpc.id
-  subnet_ids               = ["subnet-03330ca73bc3343d6", "subnet-0e55dcf1f4871ee23", "subnet-0292a516aab6776ab"]
+  subnet_ids               = ["subnet-009c46e8a4f7a00bc", "subnet-05dfc63bcd414f86d", "subnet-08be3db947d35986b"]
 
 
   eks_managed_node_groups = {
