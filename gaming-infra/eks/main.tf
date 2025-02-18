@@ -256,6 +256,7 @@ module "eks" {
 # Fetch the existing EKS cluster details dynamically
 data "aws_eks_cluster" "eks" {
   name = module.eks.cluster_name
+  depends_on = [module.eks]  # Ensures cluster is created first
 }
 
 # Install the VPC CNI add-on
